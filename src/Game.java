@@ -1,10 +1,8 @@
 import Units.Character;
 import Units.Unit;
 
-import java.util.Scanner;
 
 public class Game {
-    Scanner userInput = new Scanner(System.in);
     private Character hero;
     private Unit enemy;
     private int[] expTable = new int[100];
@@ -27,5 +25,9 @@ public class Game {
             hero.lvlUp();
         }
     }
-    
+
+    public void createNewCharacter(String name){
+
+    }
+
 }
