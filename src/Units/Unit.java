@@ -2,7 +2,7 @@ package Units;
 
 public class Unit {
 
-    private String name;
+    String name;
     final int baseHP = 100;
     final int baseMP = 50;
     final int baseDodgeChance = 5;
@@ -18,25 +18,35 @@ public class Unit {
     int intellect;
     int statsAvailable;
 
+    public String getName() {
+        return name;
+    }
 
     public int getLevel() {
         return level;
     }
 
-    public void recalculateStats() {
-
-    }
-
     public int getExperience() {
         return experience;
     }
-    public void addExperience(int amount){
-        this.experience += amount;
+
+    public String getHPMP() {
+        return "[" + name + "][HP:" + currentHP + "/" + maxHP + "][MP:" + currentMP + "/" + maxMP + "]";
     }
+
+    public void recalculateStats() {
+        this.maxHP = baseHP + (strength * 10);
+        this.maxMP = baseMP + (intellect * 5);
+    }
+
     public int getHp() {
         return currentHP;
     }
 
+    public void attackMelee(Unit enemy) {
+        enemy.currentHP -= this.strength;
+        System.out.println(this.name + " attacks " + enemy.name + " for " + this.strength);
+    }
 
 
 }

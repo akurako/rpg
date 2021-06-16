@@ -1,33 +1,35 @@
 import Units.Character;
-import Units.Unit;
+import Units.Enemy;
+import Units.Swordsman;
+
+import java.util.Random;
 
 
 public class Game {
-    private Character hero;
-    private Unit enemy;
-    private int[] expTable = new int[100];
+    Character hero;
+    Enemy enemy;
 
-    public Game() {
-        generateExpTable();
+
+
+
+
+    public void  generateEnemy(){
+        Random random = new Random();
+        int max = 3;
+        int min = -3;
+        int generatedLevel = hero.getLevel()+ random.nextInt((max - min) + 1) + min;
+        if (generatedLevel < 1) {
+            generatedLevel = 1;
+        }
+        enemy = new Enemy(generatedLevel);
     }
 
-    private void generateExpTable() {
-        double startvalue = 100;
-        double modificator = 1.15;
-        for (int i = 0; i < 100; i++) {
-            expTable[i] = (int) Math.round(startvalue);
-            startvalue = startvalue * modificator;
+
+
+    public void createNewCharacter(String name,String type){
+        switch (type) {
+            case "swordsman" -> hero = new Swordsman(name);
+            }
         }
     }
 
-    private void checkLevelUp(){
-        if (hero.getExperience() > expTable[hero.getLevel()-1]){
-            hero.lvlUp();
-        }
-    }
-
-    public void createNewCharacter(String name){
-
-    }
-
-}
