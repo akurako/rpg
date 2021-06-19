@@ -3,9 +3,10 @@ package Units;
 import Items.Item;
 import Items.Potion;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Character extends Unit {
+public class Character extends Unit implements Serializable {
     private int[] expTable = new int[100];
     static ArrayList<Item> inventory = new ArrayList<>();
     static int inventoryMaxWeight = 10000;

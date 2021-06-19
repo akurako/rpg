@@ -27,7 +27,7 @@ public class BattleField {
             System.out.println(hero.getName() + " Won the battle.");
             hero.addExperience(enemy.getExpForKill());
         } else {
-            System.out.println(enemy.getName()+ " Won the battle.");
+            System.out.println(enemy.getName() + " Won the battle.");
         }
     }
 
