@@ -15,7 +15,7 @@ public class Character extends Unit {
         generateExpTable();
     }
 
-    private void generateExpTable() {
+    public void generateExpTable() {
         double startvalue = 100;
         double modificator = 1.15;
         for (int i = 0; i < 100; i++) {
@@ -94,5 +94,8 @@ public class Character extends Unit {
         //TODO NOTIFY PLAYER
     }
 
+    public String getHeroStatus(){
+        return "["+name+"][LVL: "+level+"][EXP: "+getExperience()+"/"+expTable[level+1]+"][HP: "+currentHP+"/"+maxHP+"][MP: "+currentMP+"/"+maxMP+"]";
+    }
 
 }

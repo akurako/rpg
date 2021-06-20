@@ -12,6 +12,7 @@ public class Game {
     Scanner userInput = new Scanner(System.in);
     Character hero;
     Enemy enemy;
+    BattleField battle;
 
 
     public void generateEnemy() {
@@ -64,21 +65,21 @@ public class Game {
     }
 
     public void loadCharacterDialog() {
-        File characterFile = null;
-        final File saveDirectory = new File("SavedCharacters");
-        while (characterFile == null) {
-            System.out.println("Choose character you want to load:\n" + Arrays.toString(saveDirectory.list()));
-            characterFile = new File(saveDirectory + "/" + userInput.nextLine());
-            if (!characterFile.exists()) {
-                System.out.println("Incorrect character name.");
-                characterFile = null;
-            } else {
-                loadCharacter(characterFile);
+            File characterFile = null;
+            final File saveDirectory = new File("SavedCharacters");
+            while (characterFile == null) {
+                System.out.println("Choose character you want to load:\n" + Arrays.toString(saveDirectory.list()));
+                characterFile = new File(saveDirectory + "/" + userInput.nextLine());
+                if (!characterFile.exists()) {
+                    System.out.println("Incorrect character name.");
+                    characterFile = null;
+                } else {
+                    loadCharacter(characterFile);
+                }
             }
-        }
     }
 
-    public void loadCharacter(File characterFile){
+    private void loadCharacter(File characterFile){
         try {
             FileInputStream fileIn = new FileInputStream(characterFile);
             ObjectInputStream objectIn = new ObjectInputStream(fileIn);
@@ -86,19 +87,42 @@ public class Game {
             fileIn.close();
             objectIn.close();
 
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (InvalidClassException e){
+            e.printStackTrace();
+            System.out.println("Savegame version and game version mismatch.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         System.out.println(hero.getName()+" Successfully loaded");
     }
 
+    private void mainMenuDialog(){
+        System.out.println("Welcome to the game.\nPlease select:\n1. Create a new character.\n2. Load character.");
+        switch (userInput.nextLine()){
+            case "1" -> createNewCharacterDialog();
+            case "2" -> loadCharacterDialog();
+            default -> System.out.println("Unknown Command");
+        }
+    }
+
+    private void townDialog(){
+
+    }
+
+
+
     public void startGame() {
         while (true) {
             if (hero == null) {
-                createNewCharacterDialog();
-                saveCharacter();
-                loadCharacterDialog();
+                mainMenuDialog();
             }
+            if (hero!=null && battle == null){
+                System.out.println(hero.getHeroStatus());
+
+            }
+
         }
     }
 }
