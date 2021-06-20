@@ -11,7 +11,7 @@ public class Character extends Unit {
     static int inventoryMaxWeight = 10000;
     static int inventoryCurrentWeight = 0;
 
-    public Character(){
+    public Character() {
         generateExpTable();
     }
 
@@ -60,13 +60,13 @@ public class Character extends Unit {
         }
     }
 
-    public String getLvlExpStatus(){
-        return "["+name+"]["+getExperience()+"/"+expTable[level+1]+" exp]";
+    public String getLvlExpStatus() {
+        return "[" + name + "][" + getExperience() + "/" + expTable[level + 1] + " exp]";
     }
 
     public void addExperience(int amount) {
         experience += amount;
-        System.out.println("You earn "+amount+" experience.");
+        System.out.println("You earn " + amount + " experience.");
         checkLevelUp();
         System.out.println(getLvlExpStatus());
     }
@@ -94,8 +94,8 @@ public class Character extends Unit {
         //TODO NOTIFY PLAYER
     }
 
-    public String getHeroStatus(){
-        return "["+name+"][LVL: "+level+"][EXP: "+getExperience()+"/"+expTable[level+1]+"][HP: "+currentHP+"/"+maxHP+"][MP: "+currentMP+"/"+maxMP+"]";
+    public String getHeroStatus() {
+        return "[" + name + "][LVL: " + level + "][EXP: " + getExperience() + "/" + expTable[level + 1] + "][HP: " + currentHP + "/" + maxHP + "][MP: " + currentMP + "/" + maxMP + "]";
     }
 
 }
