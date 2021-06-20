@@ -1,6 +1,9 @@
 package Units;
 
-public class Unit {
+import java.awt.*;
+import java.io.Serializable;
+
+public class Unit implements Serializable {
 
     String name;
     final int baseHP = 100;

@@ -33,13 +33,9 @@ public class Game {
         System.out.println("Choose hero specialization \n1. Swordsman\n2. Mage\n3.Archer");
         type = Integer.parseInt(userInput.nextLine());
         switch (type) {
-            case 1 -> {
-                createNewCharacter(name, "swordsman");
-            }
-            case 2 -> {
-            }
-            case 3 -> {
-            }
+            case 1 -> createNewCharacter(name, "swordsman");
+            case 2 -> { }
+            case 3 -> { }
         }
     }
 
@@ -84,18 +80,13 @@ public class Game {
 
     public void loadCharacter(File characterFile){
         try {
-            File filename = characterFile;
-            FileInputStream fileIn = new FileInputStream(filename);
+            FileInputStream fileIn = new FileInputStream(characterFile);
             ObjectInputStream objectIn = new ObjectInputStream(fileIn);
             hero = (Character) objectIn.readObject();
             fileIn.close();
             objectIn.close();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         System.out.println(hero.getName()+" Successfully loaded");
