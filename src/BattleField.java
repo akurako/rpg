@@ -1,22 +1,27 @@
 import Units.Character;
 import Units.Enemy;
 
+import java.util.Random;
+
 public class BattleField {
+    Random rand = new Random();
     Character hero;
     Enemy enemy;
     Boolean victory = false;
-    Boolean battle = true;
+    Boolean isFinished = false;
 
+
+    //MAIN BATTLE SYSTEM------------------------------------------------------------------------------------------------
     public void startBattle(Character hero, Enemy enemy) {
         this.hero = hero;
         this.enemy = enemy;
-        while (hero.getHp() > 0 && enemy.getHp() > 0 && battle) {
+        while (hero.getHp() > 0 && enemy.getHp() > 0 && isFinished) {
             if (hero.getHp() > 0) {
-                hero.attackMelee(enemy);
+                hero.attackMelee(enemy, rand.nextInt(1000));
                 System.out.println(enemy.getHPMP());
             }
             if (enemy.getHp() > 0) {
-                enemy.attackMelee(hero);
+                enemy.attackMelee(hero, rand.nextInt(1000));
                 System.out.println(hero.getHPMP());
             }
         }

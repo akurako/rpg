@@ -1,10 +1,12 @@
 package Locations.Towns;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class TownGenerator {
     ArrayList<String> townNames = new ArrayList<>();
+    Random rand = new Random();
 
     public TownGenerator(){
         File townNamesFile = new File("data/townnames.txt");
@@ -19,5 +21,11 @@ public class TownGenerator {
         while (sc.hasNext()){
             townNames.add(sc.nextLine());
         }
+    }
+    public Town generateTown(){
+        int randomNumber = rand.nextInt(townNames.size());
+        String name = townNames.get(randomNumber);
+        townNames.remove(randomNumber);
+        return new Town(name);
     }
 }

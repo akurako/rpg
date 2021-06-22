@@ -1,9 +1,12 @@
+import Locations.Location;
+import Locations.Towns.Town;
 import Locations.Towns.TownGenerator;
 import Units.Character;
 import Units.Enemy;
 import Units.Swordsman;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
@@ -12,24 +15,18 @@ import java.util.Scanner;
 public class Game {
     Scanner userInput = new Scanner(System.in);
     TownGenerator townGenerator = new TownGenerator();
+    ArrayList<Location> knownLocations = new ArrayList<>();
     Character hero;
     Enemy enemy;
     BattleField battle;
+    Town currentTown;
+    Location currentLocation;
+    Boolean inTown;
 
 
+//CHARACTER CREATION, SAVE AND LOADING----------------------------------------------------------------------------------
 
-    public void generateEnemy() {
-        Random random = new Random();
-        int max = 3;
-        int min = -3;
-        int generatedLevel = hero.getLevel() + random.nextInt((max - min) + 1) + min;
-        if (generatedLevel < 1) {
-            generatedLevel = 1;
-        }
-        enemy = new Enemy(generatedLevel);
-    }
-
-    public void createNewCharacterDialog() {
+    private void createNewCharacterDialog() {
         String name;
         int type;
         System.out.println("Choose a name for a new hero.");
@@ -45,13 +42,14 @@ public class Game {
         }
     }
 
-    public void createNewCharacter(String name, String type) {
+    private void createNewCharacter(String name, String type) {
         switch (type) {
             case "swordsman" -> hero = new Swordsman(name);
         }
+        initializeNewCharacter();
     }
 
-    public void saveCharacter() {
+    private void saveCharacter() {
         File filename = new File("SavedCharacters/" + hero.getName());
         final File saveDirectory = new File("SavedCharacters");
         if (!saveDirectory.exists()) {
@@ -69,7 +67,7 @@ public class Game {
         }
     }
 
-    public void loadCharacterDialog() {
+    private void loadCharacterDialog() {
         File characterFile = null;
         final File saveDirectory = new File("SavedCharacters");
         if (saveDirectory.length() == 0){
@@ -106,6 +104,14 @@ public class Game {
         System.out.println(hero.getName() + " Successfully loaded");
     }
 
+    private void initializeNewCharacter(){
+        hero.setHomeTown(townGenerator.generateTown());
+        currentTown = hero.getHomeTown();
+        inTown = true;
+    }
+
+//UNSORTED--------------------------------------------------------------------------------------------------------------
+
     private void mainMenuDialog() {
         System.out.println("Welcome to the game.\nPlease select:\n1. Create a new character.\n2. Load character.");
         switch (userInput.nextLine()) {
@@ -115,17 +121,31 @@ public class Game {
         }
     }
 
-    private void townDialog() {
-
+    private void generateEnemy() {
+        Random random = new Random();
+        int max = 3;
+        int min = -3;
+        int generatedLevel = hero.getLevel() + random.nextInt((max - min) + 1) + min;
+        if (generatedLevel < 1) {
+            generatedLevel = 1;
+        }
+        enemy = new Enemy(generatedLevel);
     }
 
+    private void townDialog() {
+        System.out.println("Welcome to the "+currentTown.townName+" town.\n");
+    }
 
+//MAIN GAME SYSTEM------------------------------------------------------------------------------------------------------
     public void startGame() {
         while (true) {
             if (hero == null) {
                 mainMenuDialog();
             }
             if (hero != null && battle == null) {
+                if (inTown) {
+                    townDialog();
+                }
                 System.out.println(hero.getHeroStatus());
             }
 

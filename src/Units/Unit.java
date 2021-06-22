@@ -1,6 +1,5 @@
 package Units;
 
-import java.awt.*;
 import java.io.Serializable;
 
 public class Unit implements Serializable {
@@ -8,7 +7,7 @@ public class Unit implements Serializable {
     String name;
     final int baseHP = 100;
     final int baseMP = 50;
-    final int baseDodgeChance = 5;
+    final int baseDodgeChance = 50;
     int dodgeChance;
     int level;
     int experience;
@@ -20,6 +19,8 @@ public class Unit implements Serializable {
     int agility;
     int intellect;
     int statsAvailable;
+
+    //GETTERS AND SETTERS-----------------------------------------------------------------------------------------------
 
     public String getName() {
         return name;
@@ -37,19 +38,27 @@ public class Unit implements Serializable {
         return "[" + name + "][HP:" + currentHP + "/" + maxHP + "][MP:" + currentMP + "/" + maxMP + "]";
     }
 
-    public void recalculateStats() {
-        this.maxHP = baseHP + (strength * 10);
-        this.maxMP = baseMP + (intellect * 5);
-    }
-
     public int getHp() {
         return currentHP;
     }
 
-    public void attackMelee(Unit enemy) {
-        enemy.currentHP -= this.strength;
-        System.out.println(this.name + " attacks " + enemy.name + " for " + this.strength);
+    //STATS AND EXPERIENCE METHODS--------------------------------------------------------------------------------------
+
+    public void recalculateStats() {
+        this.maxHP = baseHP + (strength * 10);
+        this.maxMP = baseMP + (intellect * 5);
+        this.dodgeChance = baseDodgeChance + (agility * 2);
     }
 
+    //IN BATTLE METHODS-------------------------------------------------------------------------------------------------
+
+    public void attackMelee(Unit enemy, int randomNumber) {
+        if (randomNumber > enemy.dodgeChance) {
+            enemy.currentHP -= this.strength;
+            System.out.println(this.name + " attacks " + enemy.name + " for " + this.strength);
+        } else {
+            System.out.println(enemy.name + "avoided attack.");
+        }
+    }
 
 }
