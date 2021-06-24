@@ -26,4 +26,8 @@ public class Enemy extends Unit {
     public void calculateExpForKill(){
         exp_for_kill = (strength+agility+intellect)*level;
     }
+
+    public String getEnemyStatus() {
+        return "[" + name + "][LVL: " + level + "][HP: " + currentHP + "/" + maxHP + "][MP: " + currentMP + "/" + maxMP + "]";
+    }
 }

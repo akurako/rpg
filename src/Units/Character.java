@@ -37,11 +37,11 @@ public class Character extends Unit {
     //EXPERIENCE METHODS------------------------------------------------------------------------------------------------
 
     public void generateExpTable() {
-        double startvalue = 100;
+        double startValue = 100;
         double modificator = 1.15;
         for (int i = 0; i < 100; i++) {
-            expTable[i] = (int) Math.round(startvalue);
-            startvalue = startvalue * modificator;
+            expTable[i] = (int) Math.round(startValue);
+            startValue = startValue * modificator;
         }
     }
 

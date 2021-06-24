@@ -18,7 +18,7 @@ public class Game {
     ArrayList<Location> knownLocations = new ArrayList<>();
     Character hero;
     Enemy enemy;
-    BattleField battle;
+    BattleField battle = new BattleField();
     Town currentTown;
     Location currentLocation;
     Boolean inTown;
@@ -136,6 +136,11 @@ public class Game {
         System.out.println("Welcome to the "+currentTown.townName+" town.\n");
     }
 
+    private void startBattle(){
+        battle.getScannerControl(userInput);
+        battle.startBattle(hero,enemy);
+    }
+
 //MAIN GAME SYSTEM------------------------------------------------------------------------------------------------------
     public void startGame() {
         while (true) {
@@ -147,7 +152,10 @@ public class Game {
                     townDialog();
                 }
                 System.out.println(hero.getHeroStatus());
+
             }
+            battle.getScannerControl(userInput);
+            battle.startBattle(this.hero,new Enemy(1));
 
         }
     }

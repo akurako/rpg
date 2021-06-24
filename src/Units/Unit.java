@@ -57,7 +57,7 @@ public class Unit implements Serializable {
             enemy.currentHP -= this.strength;
             System.out.println(this.name + " attacks " + enemy.name + " for " + this.strength);
         } else {
-            System.out.println(enemy.name + "avoided attack.");
+            System.out.println(enemy.name + " avoided attack.");
         }
     }
 
