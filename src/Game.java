@@ -1,3 +1,4 @@
+import Items.ItemGenerator;
 import Locations.Location;
 import Locations.Towns.Town;
 import Locations.Towns.TownGenerator;
@@ -16,6 +17,7 @@ public class Game {
     Scanner userInput = new Scanner(System.in);
     TownGenerator townGenerator = new TownGenerator();
     ArrayList<Location> knownLocations = new ArrayList<>();
+    ItemGenerator ig = new ItemGenerator();
     Character hero;
     Enemy enemy;
     BattleField battle = new BattleField();
@@ -134,6 +136,7 @@ public class Game {
 
     private void townDialog() {
         System.out.println("Welcome to the "+currentTown.townName+" town.\n");
+
     }
 
     private void startBattle(){
@@ -146,17 +149,27 @@ public class Game {
         while (true) {
             if (hero == null) {
                 mainMenuDialog();
-            }
-            if (hero != null && battle == null) {
-                if (inTown) {
-                    townDialog();
+            } else {
+                if (battle == null) {
+                    if (inTown) {
+                        townDialog();
+                    }
+                    System.out.println(hero.getHeroStatus());
+
                 }
-                System.out.println(hero.getHeroStatus());
+                battle.getScannerControl(userInput);
+                hero.addToInventory(ig.generatePotion());
+                hero.addToInventory(ig.generatePotion());
+                hero.addToInventory(ig.generatePotion());
+                hero.addToInventory(ig.generatePotion());
+                hero.addToInventory(ig.generatePotion());
+                hero.addToInventory(ig.generatePotion());
+                hero.addToInventory(ig.generatePotion());
+                hero.addToInventory(ig.generatePotion());
+                hero.addToInventory(ig.generatePotion());
+                battle.startBattle(this.hero, new Enemy(1));
 
             }
-            battle.getScannerControl(userInput);
-            battle.startBattle(this.hero,new Enemy(1));
-
         }
     }
 }

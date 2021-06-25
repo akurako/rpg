@@ -1,10 +1,12 @@
 package Units;
 
+import Items.Armor;
 import Items.Item;
 import Items.Potion;
 import Locations.Towns.Town;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Character extends Unit {
     private int[] expTable = new int[100];
@@ -30,7 +32,7 @@ public class Character extends Unit {
     }
 
     public String getHeroStatus() {
-        return "[" + name + "]["+speciality+"][LVL: " + level + "][EXP: " + getExperience() + "/" + expTable[level + 1] + "][HP: " + currentHP + "/" + maxHP + "][MP: " + currentMP + "/" + maxMP + "]";
+        return "[" + name + "][" + speciality + "][LVL: " + level + "][EXP: " + getExperience() + "/" + expTable[level + 1] + "][HP: " + currentHP + "/" + maxHP + "][MP: " + currentMP + "/" + maxMP + "]";
     }
 
 
@@ -73,8 +75,22 @@ public class Character extends Unit {
 
     public void addToInventory(Item item) {
         if ((this.inventoryCurrentWeight + item.getWeight()) <= this.inventoryMaxWeight) {
-            this.inventory.add(item);
-            this.inventoryCurrentWeight += item.getWeight();
+            if (item instanceof Potion) {
+                boolean stacked = false;
+                for (Item potion : inventory) {
+                    if (potion.getName().equals(item.getName())) {
+                        ((Potion) potion).addOne();
+                        stacked = true;
+                    }
+                }
+                if (!stacked) {
+                    this.inventory.add(item);
+                    this.inventoryCurrentWeight += item.getWeight();
+                }
+            } else {
+                this.inventory.add(item);
+                this.inventoryCurrentWeight += item.getWeight();
+            }
         } else {
             System.out.println("too heavy");
         }
@@ -112,4 +128,38 @@ public class Character extends Unit {
 
     }
 
+    public void usePotionDialog(Scanner sc) {
+        Scanner userInput = sc;
+        int inputNumber = 1;
+        ArrayList<String> potionList = new ArrayList<>();
+        for (Item item : inventory) {
+            if (item instanceof Potion) {
+                potionList.add(item.getName());
+                System.out.println(inputNumber + ". " + item.getName() + " [" + ((Potion) item).getCount() + "]");
+                inputNumber++;
+            }
+        }
+        System.out.println(inputNumber+ ". Back");
+        if (potionList.size() > 0) {
+            int chosenItem = Integer.parseInt(userInput.nextLine());
+
+            if (chosenItem <= inputNumber + 1) {
+                for (Item item : inventory) {
+                    if (item.getName().equals(potionList.get(chosenItem - 1))) {
+                        if (((Potion) item).getCount() > 1) {
+                            ((Potion) item).useOne();
+                            usePotion(((Potion) item));
+                            break;
+                        } else {
+                            usePotion(((Potion) item));
+                            removeFromInventory(item);
+                            break;
+                        }
+                    }
+                }
+            }
+        } else{
+            System.out.println("You dont have any potions.");
+        }
+    }
 }

@@ -24,7 +24,7 @@ public class BattleField {
                 attack();
             }
             case 2 -> {
-                System.out.println("not working yet :[");
+                hero.usePotionDialog(userInput);
             }
             case 3 -> {
                 flee();
