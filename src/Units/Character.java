@@ -65,7 +65,8 @@ public class Character extends Unit {
     }
 
     public void lvlUp() {
-        statsAvailable += 3;
+        statsAvailable += 5;
+        experience = 0;
         level++;
         System.out.println("You become stronger.");
     }
@@ -106,8 +107,11 @@ public class Character extends Unit {
         } else if (potion.getPotionType().equals("mana")) {
             currentMP = recovery(currentMP, maxMP, potion.getRecoveryPercentage());
         }
-
-        removeFromInventory(potion);
+        if (potion.getCount() > 1) {
+            potion.useOne();
+        } else {
+            removeFromInventory(potion);
+        }
         //TODO NOTIFY PLAYER
     }
 
@@ -139,26 +143,20 @@ public class Character extends Unit {
                 inputNumber++;
             }
         }
-        System.out.println(inputNumber+ ". Back");
+        System.out.println(inputNumber + ". Back");
         if (potionList.size() > 0) {
             int chosenItem = Integer.parseInt(userInput.nextLine());
 
-            if (chosenItem <= inputNumber + 1) {
+            if (chosenItem <= potionList.size() ) {
                 for (Item item : inventory) {
                     if (item.getName().equals(potionList.get(chosenItem - 1))) {
-                        if (((Potion) item).getCount() > 1) {
-                            ((Potion) item).useOne();
-                            usePotion(((Potion) item));
-                            break;
-                        } else {
-                            usePotion(((Potion) item));
-                            removeFromInventory(item);
-                            break;
-                        }
+
+                        usePotion(((Potion) item));
+                       break;
                     }
                 }
             }
-        } else{
+        } else {
             System.out.println("You dont have any potions.");
         }
     }

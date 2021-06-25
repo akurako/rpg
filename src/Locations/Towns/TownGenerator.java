@@ -1,4 +1,5 @@
 package Locations.Towns;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -6,9 +7,8 @@ import java.util.Scanner;
 
 public class TownGenerator {
     ArrayList<String> townNames = new ArrayList<>();
-    Random rand = new Random();
 
-    public TownGenerator(){
+    public TownGenerator() {
         File townNamesFile = new File("data/townnames.txt");
         FileInputStream fis = null;
         try {
@@ -18,11 +18,18 @@ public class TownGenerator {
             System.out.println(townNamesFile + "Not found.");
         }
         Scanner sc = new Scanner(fis);
-        while (sc.hasNext()){
+        while (sc.hasNext()) {
             townNames.add(sc.nextLine());
         }
+        try {
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-    public Town generateTown(){
+
+    public Town generateTown() {
+        Random rand = new Random();
         int randomNumber = rand.nextInt(townNames.size());
         String name = townNames.get(randomNumber);
         townNames.remove(randomNumber);

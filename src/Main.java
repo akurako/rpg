@@ -7,3 +7,8 @@ public class Main {
 
     }
 }
+//TODO Use potion NOTIFY player recovery amount;
+//TODO Gold rewards
+//TODO Town MENU
+//TODO DUNGEON GENERATION + FILL UP MONSTERS ARRAY
+//TODO EXP SYSTEM: EXCEED EXP TRANSFER TO NEXT LVL

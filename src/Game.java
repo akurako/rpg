@@ -4,6 +4,7 @@ import Locations.Towns.Town;
 import Locations.Towns.TownGenerator;
 import Units.Character;
 import Units.Enemy;
+import Units.EnemyGenerator;
 import Units.Swordsman;
 
 import java.io.*;
@@ -18,6 +19,7 @@ public class Game {
     TownGenerator townGenerator = new TownGenerator();
     ArrayList<Location> knownLocations = new ArrayList<>();
     ItemGenerator ig = new ItemGenerator();
+    EnemyGenerator eg = new EnemyGenerator();
     Character hero;
     Enemy enemy;
     BattleField battle = new BattleField();
@@ -123,16 +125,7 @@ public class Game {
         }
     }
 
-    private void generateEnemy() {
-        Random random = new Random();
-        int max = 3;
-        int min = -3;
-        int generatedLevel = hero.getLevel() + random.nextInt((max - min) + 1) + min;
-        if (generatedLevel < 1) {
-            generatedLevel = 1;
-        }
-        enemy = new Enemy(generatedLevel);
-    }
+
 
     private void townDialog() {
         System.out.println("Welcome to the "+currentTown.townName+" town.\n");
@@ -167,7 +160,7 @@ public class Game {
                 hero.addToInventory(ig.generatePotion());
                 hero.addToInventory(ig.generatePotion());
                 hero.addToInventory(ig.generatePotion());
-                battle.startBattle(this.hero, new Enemy(1));
+                battle.startBattle(this.hero, eg.generateEnemy(this.hero));
 
             }
         }

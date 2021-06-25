@@ -38,6 +38,7 @@ public class Potion extends Item {
         count++;
         stackWeight += weight;
     }
+
     public void useOne(){
         count--;
         stackWeight -= weight;

@@ -11,13 +11,13 @@ public class Enemy extends Unit {
     private int chance_for_drop_item;
     private final int startingStats = 7;
 
-    public Enemy(int level){
+    public Enemy(String name,int level){
 
         this.level =level;
         this.strength = startingStats;
         this.agility = startingStats;
         this.intellect = startingStats;
-        this.name = "Test Enemy";
+        this.name = name;
         recalculateStats();
         calculateExpForKill();
         this.currentHP = this.maxHP;
