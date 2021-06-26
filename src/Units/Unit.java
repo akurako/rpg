@@ -36,7 +36,7 @@ public class Unit implements Serializable {
         return experience;
     }
 
-    public String getHPMP() {
+    public String getHpMp() {
         return "[" + name + "][HP:" + currentHP + "/" + maxHP + "][MP:" + currentMP + "/" + maxMP + "]";
     }
 

@@ -1,11 +1,12 @@
 package Items;
 
+
 import java.util.Random;
 
 public class ItemGenerator {
-    Random random = new Random();
+ private static Random random = new Random();
 
-    public Potion generatePotion() {
+    public static Potion generatePotion() {
         int rand = random.nextInt(100);
         String type;
         if (rand > 50) {

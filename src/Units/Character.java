@@ -55,12 +55,12 @@ public class Character extends Unit {
     }
 
     public String getLvlExpStatus() {
-        return "[" + name + "][" + getExperience() + "/" + expTable[level + 1] + " exp]";
+        return Colors.GREEN_BOLD + "[" + name + "][" + getExperience() + "/" + expTable[level + 1] + " exp]"+ Colors.RESET;
     }
 
     public void addExperience(int amount) {
         experience += amount;
-        System.out.println("You earn " + amount + " experience.");
+        System.out.println(Colors.YELLOW + "You earn " + amount + " experience." + Colors.RESET);
         checkLevelUp();
         System.out.println(getLvlExpStatus());
     }
@@ -77,6 +77,7 @@ public class Character extends Unit {
 
     public void addToInventory(Item item) {
         if ((this.inventoryCurrentWeight + item.getWeight()) <= this.inventoryMaxWeight) {
+            System.out.println(Colors.YELLOW + item.getName() + " added to your inventory." + Colors.RESET);
             if (item instanceof Potion) {
                 boolean stacked = false;
                 for (Item potion : inventory) {
@@ -103,19 +104,23 @@ public class Character extends Unit {
     }
 
     public void usePotion(Potion potion) {
-        if (potion.getPotionType().equals("heal")){
+        if (potion.getPotionType().equals("heal")) {
             int startHP = currentHP;
             int onePercent = maxHP / 100;
             currentHP += (onePercent * potion.getRecoveryPercentage());
-            if (currentHP > maxMP){currentHP = maxHP;}
-            System.out.println("You drink a healing potion and replenish "+(currentHP - startHP) +" HP");
+            if (currentHP > maxMP) {
+                currentHP = maxHP;
+            }
+            System.out.println("You drink a healing potion and replenish " + (currentHP - startHP) + " HP");
         }
-        if (potion.getPotionType().equals("mana")){
+        if (potion.getPotionType().equals("mana")) {
             int startMP = currentMP;
             int onePercent = maxMP / 100;
             currentMP += (onePercent * potion.getRecoveryPercentage());
-            if (currentMP > maxMP){currentMP = maxMP;}
-            System.out.println("You drink a mana potion and replenish "+(currentMP - startMP) +" MP");
+            if (currentMP > maxMP) {
+                currentMP = maxMP;
+            }
+            System.out.println("You drink a mana potion and replenish " + (currentMP - startMP) + " MP");
         }
         if (potion.getCount() > 1) {
             potion.useOne();
@@ -145,12 +150,12 @@ public class Character extends Unit {
         if (potionList.size() > 0) {
             int chosenItem = Integer.parseInt(userInput.nextLine());
 
-            if (chosenItem <= potionList.size() ) {
+            if (chosenItem <= potionList.size()) {
                 for (Item item : inventory) {
                     if (item.getName().equals(potionList.get(chosenItem - 1))) {
 
                         usePotion(((Potion) item));
-                       break;
+                        break;
                     }
                 }
             }

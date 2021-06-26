@@ -11,8 +11,4 @@ public class Item {
     public String getName() {
         return name;
     }
-
-    public static void printName(Item item) {
-        System.out.println(item.getName());
-    }
 }

@@ -5,10 +5,8 @@ import Locations.Dungeons.DungeonGenerator;
 import Locations.Location;
 import Locations.Towns.Town;
 import Locations.Towns.TownGenerator;
+import Units.*;
 import Units.Character;
-import Units.Enemy;
-import Units.EnemyGenerator;
-import Units.Swordsman;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -18,12 +16,13 @@ import java.util.Scanner;
 
 
 public class Game {
-    Scanner userInput = new Scanner(System.in);
-    TownGenerator townGenerator = new TownGenerator();
+    public static Scanner userInput = new Scanner(System.in);
+    static TownGenerator townGenerator = new TownGenerator();
     ArrayList<Location> knownLocations = new ArrayList<>();
-    ItemGenerator ig = new ItemGenerator();
-    EnemyGenerator eg = new EnemyGenerator();
-    DungeonGenerator dg = new DungeonGenerator();
+    static ItemGenerator ig = new ItemGenerator();
+    static EnemyGenerator eg = new EnemyGenerator();
+    static DungeonGenerator dg = new DungeonGenerator();
+    public static Random random = new Random();
     TownGenerator tg = new TownGenerator();
     Character hero;
     Enemy enemy;
@@ -38,22 +37,25 @@ public class Game {
     private void createNewCharacterDialog() {
         String name;
         int type;
-        System.out.println("Choose a name for a new hero.");
+        clearScreen();
+        System.out.println(Colors.CYAN_BOLD + "Choose a name for your hero." + Colors.RESET);
         name = userInput.nextLine();
-        System.out.println("Choose hero specialization \n1. Swordsman\n2. Mage\n3.Archer");
+        clearScreen();
+        System.out.println(Colors.CYAN_BOLD + "Choose hero specialization " + Colors.CYAN + " \n 1. Swordsman\n 2. Mage (Work in progress)\n 3.Archer (Work in progress)" + Colors.RESET);
         type = Integer.parseInt(userInput.nextLine());
+        clearScreen();
         switch (type) {
             case 1 -> createNewCharacter(name, "swordsman");
-            case 2 -> {
-            }
-            case 3 -> {
-            }
+            case 2 -> createNewCharacter(name, "mage");
+            case 3 -> createNewCharacter(name, "archer");
         }
     }
 
     private void createNewCharacter(String name, String type) {
         switch (type) {
             case "swordsman" -> hero = new Swordsman(name);
+            case "mage" -> hero = new Mage(name);
+            case "archer" -> hero = new Archer(name);
         }
         initializeNewCharacter();
     }
@@ -124,7 +126,7 @@ public class Game {
 //UNSORTED--------------------------------------------------------------------------------------------------------------
 
     private void mainMenuDialog() {
-        System.out.println(Colors.CYAN + "Welcome to the game.\nPlease select:\n 1. Create a new character.\n 2. Load character." + Colors.RESET);
+        System.out.println(Colors.CYAN_BOLD + "Welcome to the game." + Colors.CYAN + "\n 1. Create a new character.\n 2. Load character." + Colors.RESET);
         switch (userInput.nextLine()) {
             case "1" -> createNewCharacterDialog();
             case "2" -> loadCharacterDialog();
@@ -132,29 +134,25 @@ public class Game {
         }
     }
 
+    public static void clearScreen() {
+        System.out.println("\033[H\033[2J");
+    }
+
     private void dungeonDialog() {
 
         if (enemy == null) {
             System.out.println(Colors.CYAN + currentLocation.getName() + "\n 1. Explore\n 2. Go back to " + currentTown.getName() + Colors.RESET);
             switch (userInput.nextLine()) {
-                case "1" -> {
-                    exploreDungeon();
-                }
-                case "2" -> {
-                    currentLocation = currentTown;
-                }
+                case "1" -> exploreDungeon();
+                case "2" -> currentLocation = currentTown;
                 default -> {
                 }
             }
         } else {
             System.out.println(Colors.CYAN + "Start a fight?\n 1. YES\n 2. RUN" + Colors.RESET);
             switch (userInput.nextLine()) {
-                case "1" -> {
-                    startBattle();
-                }
-                case "2" -> {
-                    enemy = null;
-                }
+                case "1" -> startBattle();
+                case "2" -> enemy = null;
                 default -> {
                 }
             }
@@ -171,9 +169,7 @@ public class Game {
     private void townDialog() {
         System.out.println(Colors.CYAN + "Welcome to the " + currentTown.getName() + " town.\n1. Go to " + currentTown.townDungeon.getName() + Colors.RESET);
         switch (userInput.nextLine()) {
-            case "1" -> {
-                currentLocation = currentTown.townDungeon;
-            }
+            case "1" -> currentLocation = currentTown.townDungeon;
         }
     }
 
