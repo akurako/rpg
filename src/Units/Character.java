@@ -102,28 +102,25 @@ public class Character extends Unit {
     }
 
     public void usePotion(Potion potion) {
-        if (potion.getPotionType().equals("heal")) {
-            currentHP = recovery(currentHP, maxHP, potion.getRecoveryPercentage());
-        } else if (potion.getPotionType().equals("mana")) {
-            currentMP = recovery(currentMP, maxMP, potion.getRecoveryPercentage());
+        if (potion.getPotionType().equals("heal")){
+            int startHP = currentHP;
+            int onePercent = maxHP / 100;
+            currentHP += (onePercent * potion.getRecoveryPercentage());
+            if (currentHP > maxMP){currentHP = maxHP;}
+            System.out.println("You drink a healing potion and replenish "+(currentHP - startHP) +" HP");
+        }
+        if (potion.getPotionType().equals("mana")){
+            int startMP = currentMP;
+            int onePercent = maxMP / 100;
+            currentMP += (onePercent * potion.getRecoveryPercentage());
+            if (currentMP > maxMP){currentMP = maxMP;}
+            System.out.println("You drink a mana potion and replenish "+(currentMP - startMP) +" MP");
         }
         if (potion.getCount() > 1) {
             potion.useOne();
         } else {
             removeFromInventory(potion);
         }
-        //TODO NOTIFY PLAYER
-    }
-
-    public int recovery(int current, int max, int recoveryPercentage) {
-        int recoveryValue;
-        int onePercent = max / 100;
-        if (current + (onePercent * recoveryPercentage) > max) {
-            recoveryValue = max;
-        } else {
-            recoveryValue = current + (onePercent * recoveryPercentage);
-        }
-        return recoveryValue;
     }
 
     public void removeFromInventory(Item item) {

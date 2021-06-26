@@ -14,10 +14,10 @@ public class Enemy extends Unit {
     public Enemy(String name,int level){
 
         this.level =level;
+        this.name = name;
         this.strength = startingStats;
         this.agility = startingStats;
         this.intellect = startingStats;
-        this.name = name;
         recalculateStats();
         calculateExpForKill();
         this.currentHP = this.maxHP;
