@@ -1,5 +1,8 @@
 package Locations.Dungeons;
 
+import Units.Character;
+import Units.EnemyGenerator;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,4 +41,12 @@ public class DungeonGenerator {
         dungeonNames.remove(randomNumber);
         return new Dungeon(name);
     }
+
+    public void fillDungeon(Character hero, Dungeon dungeon){
+        for (int i = 0; i < dungeon.numberOfEnemies ; i++) {
+            dungeon.locationEnemies.add(new EnemyGenerator().generateEnemy(hero));
+        }
+    }
+
+
 }

@@ -1,4 +1,6 @@
 import Items.ItemGenerator;
+import Locations.Dungeons.Dungeon;
+import Locations.Dungeons.DungeonGenerator;
 import Locations.Location;
 import Locations.Towns.Town;
 import Locations.Towns.TownGenerator;
@@ -10,6 +12,7 @@ import Units.Swordsman;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 
 
@@ -19,9 +22,11 @@ public class Game {
     ArrayList<Location> knownLocations = new ArrayList<>();
     ItemGenerator ig = new ItemGenerator();
     EnemyGenerator eg = new EnemyGenerator();
+    DungeonGenerator dg = new DungeonGenerator();
+    TownGenerator tg = new TownGenerator();
     Character hero;
     Enemy enemy;
-    BattleField battle = new BattleField();
+    BattleField battle;
     Town currentTown;
     Location currentLocation;
     Boolean inTown;
@@ -73,7 +78,7 @@ public class Game {
     private void loadCharacterDialog() {
         File characterFile = null;
         final File saveDirectory = new File("SavedCharacters");
-        if (saveDirectory.length() == 0){
+        if (saveDirectory.length() == 0) {
             System.out.println("You dont have any saved characters.");
         }
         while (characterFile == null && saveDirectory.list().length != 0) {
@@ -107,10 +112,12 @@ public class Game {
         System.out.println(hero.getName() + " Successfully loaded");
     }
 
-    private void initializeNewCharacter(){
+    private void initializeNewCharacter() {
         hero.setHomeTown(townGenerator.generateTown());
         currentTown = hero.getHomeTown();
-        inTown = true;
+        currentLocation = currentTown;
+        currentTown.townDungeon = dg.generateDungeon();
+        dg.fillDungeon(hero, currentTown.townDungeon);
     }
 
 //UNSORTED--------------------------------------------------------------------------------------------------------------
@@ -124,43 +131,66 @@ public class Game {
         }
     }
 
+    private void dungeonDialog() {
 
+        if (enemy == null) {
+            System.out.println(currentLocation.getName() + "\n 1. Explore\n 2. Go back to " + currentTown.getName());
+            switch (userInput.nextLine()) {
+                case "1" -> {exploreDungeon();
+                }
+                case "2" -> {
+                    currentLocation = currentTown;
+                }
+                default -> { }
+            }
+        } else {
+            System.out.println("Start a fight?\n 1. YES\n 2. RUN");
+            switch (userInput.nextLine()){
+                case "1" -> {startBattle();}
+                case "2" -> {enemy = null;}
+                default -> {}
+        }
+    }
+
+}
+
+    private void exploreDungeon() {
+        Random rand = new Random();
+        enemy = ((Dungeon) currentLocation).getLocationEnemies().get(rand.nextInt(((Dungeon) currentLocation).getLocationEnemies().size()));
+        System.out.println("Enemy appeared " + enemy.getName() + " LVL:" + enemy.getLevel());
+    }
 
     private void townDialog() {
-        System.out.println("Welcome to the "+currentTown.townName+" town.\n");
-
+        System.out.println("Welcome to the " + currentTown.getName() + " town.\n1. Go to " + currentTown.townDungeon.getName());
+        switch (userInput.nextLine()) {
+            case "1" -> {
+                currentLocation = currentTown.townDungeon;
+            }
+        }
     }
 
-    private void startBattle(){
+    private void startBattle() {
+        battle = new BattleField();
         battle.getScannerControl(userInput);
-        battle.startBattle(hero,enemy);
+        battle.startBattle(hero, enemy);
+        enemy = null;
+        battle = null;
     }
 
-//MAIN GAME SYSTEM------------------------------------------------------------------------------------------------------
+    //MAIN GAME SYSTEM------------------------------------------------------------------------------------------------------
     public void startGame() {
         while (true) {
             if (hero == null) {
                 mainMenuDialog();
             } else {
                 if (battle == null) {
-                    if (inTown) {
+                    if (currentLocation instanceof Town) {
                         townDialog();
                     }
-                    System.out.println(hero.getHeroStatus());
-
+                    if (currentLocation instanceof Dungeon) {
+                        dungeonDialog();
+                    }
                 }
-                battle.getScannerControl(userInput);
-                hero.addToInventory(ig.generatePotion());
-                hero.addToInventory(ig.generatePotion());
-                hero.addToInventory(ig.generatePotion());
-                hero.addToInventory(ig.generatePotion());
-                hero.addToInventory(ig.generatePotion());
-                hero.addToInventory(ig.generatePotion());
-                hero.addToInventory(ig.generatePotion());
-                hero.addToInventory(ig.generatePotion());
-                hero.addToInventory(ig.generatePotion());
-                battle.startBattle(this.hero, eg.generateEnemy(this.hero));
-
             }
         }
     }

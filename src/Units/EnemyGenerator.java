@@ -1,7 +1,5 @@
 package Units;
 
-import Locations.Towns.Town;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -45,4 +43,6 @@ public class EnemyGenerator {
         }
         return new Enemy(name,generatedLevel);
     }
+
+
 }
