@@ -1,3 +1,4 @@
+import Interfaces.Colors;
 import Items.ItemGenerator;
 import Locations.Dungeons.Dungeon;
 import Locations.Dungeons.DungeonGenerator;
@@ -123,7 +124,7 @@ public class Game {
 //UNSORTED--------------------------------------------------------------------------------------------------------------
 
     private void mainMenuDialog() {
-        System.out.println("Welcome to the game.\nPlease select:\n1. Create a new character.\n2. Load character.");
+        System.out.println(Colors.CYAN + "Welcome to the game.\nPlease select:\n 1. Create a new character.\n 2. Load character." + Colors.RESET);
         switch (userInput.nextLine()) {
             case "1" -> createNewCharacterDialog();
             case "2" -> loadCharacterDialog();
@@ -134,34 +135,41 @@ public class Game {
     private void dungeonDialog() {
 
         if (enemy == null) {
-            System.out.println(currentLocation.getName() + "\n 1. Explore\n 2. Go back to " + currentTown.getName());
+            System.out.println(Colors.CYAN + currentLocation.getName() + "\n 1. Explore\n 2. Go back to " + currentTown.getName() + Colors.RESET);
             switch (userInput.nextLine()) {
-                case "1" -> {exploreDungeon();
+                case "1" -> {
+                    exploreDungeon();
                 }
                 case "2" -> {
                     currentLocation = currentTown;
                 }
-                default -> { }
+                default -> {
+                }
             }
         } else {
-            System.out.println("Start a fight?\n 1. YES\n 2. RUN");
-            switch (userInput.nextLine()){
-                case "1" -> {startBattle();}
-                case "2" -> {enemy = null;}
-                default -> {}
+            System.out.println(Colors.CYAN + "Start a fight?\n 1. YES\n 2. RUN" + Colors.RESET);
+            switch (userInput.nextLine()) {
+                case "1" -> {
+                    startBattle();
+                }
+                case "2" -> {
+                    enemy = null;
+                }
+                default -> {
+                }
+            }
         }
-    }
 
-}
+    }
 
     private void exploreDungeon() {
         Random rand = new Random();
         enemy = ((Dungeon) currentLocation).getLocationEnemies().get(rand.nextInt(((Dungeon) currentLocation).getLocationEnemies().size()));
-        System.out.println("Enemy appeared " + enemy.getName() + " LVL:" + enemy.getLevel());
+        System.out.println(Colors.RED + "Enemy appeared " + enemy.getName() + " LVL:" + enemy.getLevel() + Colors.RESET);
     }
 
     private void townDialog() {
-        System.out.println("Welcome to the " + currentTown.getName() + " town.\n1. Go to " + currentTown.townDungeon.getName());
+        System.out.println(Colors.CYAN + "Welcome to the " + currentTown.getName() + " town.\n1. Go to " + currentTown.townDungeon.getName() + Colors.RESET);
         switch (userInput.nextLine()) {
             case "1" -> {
                 currentLocation = currentTown.townDungeon;

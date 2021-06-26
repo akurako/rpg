@@ -1,5 +1,6 @@
 package Units;
 
+import Interfaces.Colors;
 import Items.Armor;
 import Items.Item;
 import Items.Potion;
@@ -32,7 +33,7 @@ public class Character extends Unit {
     }
 
     public String getHeroStatus() {
-        return "[" + name + "][" + speciality + "][LVL: " + level + "][EXP: " + getExperience() + "/" + expTable[level + 1] + "][HP: " + currentHP + "/" + maxHP + "][MP: " + currentMP + "/" + maxMP + "]";
+        return Colors.GREEN_BOLD + "[" + name + "][" + speciality + "][LVL: " + level + "][EXP: " + getExperience() + "/" + expTable[level + 1] + "][HP: " + currentHP + "/" + maxHP + "][MP: " + currentMP + "/" + maxMP + "]" + Colors.RESET;
     }
 
 

@@ -1,5 +1,7 @@
 package Units;
 
+import Interfaces.Colors;
+
 import java.io.Serializable;
 
 public class Unit implements Serializable {
@@ -55,9 +57,9 @@ public class Unit implements Serializable {
     public void attackMelee(Unit enemy, int randomNumber) {
         if (randomNumber > enemy.dodgeChance) {
             enemy.currentHP -= this.strength;
-            System.out.println(this.name + " attacks " + enemy.name + " for " + this.strength);
+            System.out.println(Colors.YELLOW + this.name + " attacks " + enemy.name + " for " + this.strength + Colors.RESET);
         } else {
-            System.out.println(enemy.name + " avoided attack.");
+            System.out.println(Colors.YELLOW + enemy.name + " avoided attack." + Colors.RESET);
         }
     }
 

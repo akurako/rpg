@@ -1,3 +1,4 @@
+import Interfaces.Colors;
 import Units.Character;
 import Units.Enemy;
 
@@ -18,7 +19,7 @@ public class BattleField {
 
     //BATTLE MENU-------------------------------------------------------------------------------------------------------
     private void battleMainMenu() {
-        System.out.println("What you want to do next?\n1. Attack\n2. Use potion.\n3. RUN FOR YOUR LIFE");
+        System.out.println(Colors.CYAN + "What you want to do next?\n 1. Attack\n 2. Use potion.\n 3. RUN FOR YOUR LIFE"+ Colors.RESET);
         switch (Integer.parseInt(userInput.nextLine())) {
             case 1 -> {
                 attack();
@@ -35,10 +36,10 @@ public class BattleField {
 
     private void attack() {
         hero.attackMelee(enemy, rand.nextInt(1000));
-        System.out.println(enemy.getHPMP());
+        System.out.println(Colors.RED + enemy.getHPMP()+Colors.RESET);
         if (enemy.getHp() > 0) {
             enemy.attackMelee(hero, rand.nextInt(1000));
-            System.out.println(hero.getHPMP());
+            System.out.println(Colors.GREEN + hero.getHPMP() + Colors.RESET);
         } else {
             isFinished = true;
             victory = true;
@@ -72,8 +73,7 @@ public class BattleField {
         isFinished = false;
         this.hero = hero;
         this.enemy = enemy;
-        System.out.println(hero.getHeroStatus());
-        System.out.println("Your enemy: " + enemy.getEnemyStatus());
+        System.out.println(hero.getHeroStatus() + " VS "+enemy.getEnemyStatus());
         while (!isFinished) {
             battleMainMenu();
         }

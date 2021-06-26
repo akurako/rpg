@@ -1,5 +1,7 @@
 package Units;
 
+import Interfaces.Colors;
+
 import java.util.Random;
 
 public class Enemy extends Unit {
@@ -51,6 +53,6 @@ public class Enemy extends Unit {
     }
 
     public String getEnemyStatus() {
-        return "[" + name + "][LVL: " + level + "][HP: " + currentHP + "/" + maxHP + "][MP: " + currentMP + "/" + maxMP + "]";
+        return Colors.RED_BOLD + "[" + name + "][LVL: " + level + "][HP: " + currentHP + "/" + maxHP + "][MP: " + currentMP + "/" + maxMP + "]" + Colors.RESET;
     }
 }
