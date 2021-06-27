@@ -21,21 +21,21 @@ public class BattleField {
 
     //BATTLE MENU-------------------------------------------------------------------------------------------------------
     private void battleMainMenu() {
-        System.out.println(Colors.CYAN + "What you want to do next?\n 1. Attack\n 2. Use potion.\n 3. RUN FOR YOUR LIFE" + Colors.RESET);
-        switch (Integer.parseInt(userInput.nextLine())) {
-            case 1 -> attack();
-            case 2 -> hero.usePotionDialog(userInput);
-            case 3 -> flee();
-            default -> System.out.println("Wrong input.");
+        System.out.println(Colors.CYAN_BOLD + "What you want to do next?" + Colors.CYAN + "\n 1. Attack\n 2. Use potion.\n 3. RUN FOR YOUR LIFE" + Colors.RESET);
+        switch (userInput.nextLine()) {
+            case "1" -> attack();
+            case "2" -> hero.usePotionDialog(userInput);
+            case "3" -> flee();
+            default -> System.out.println(Colors.YELLOW + "Wrong input. Try again." + Colors.RESET);
         }
     }
 
     private void attack() {
         hero.attackMelee(enemy, rand.nextInt(1000));
-        System.out.println(Colors.RED + enemy.getHpMp() + Colors.RESET);
+        System.out.println(Colors.RED_BOLD + enemy.getHpMp() + Colors.RESET);
         if (enemy.getHp() > 0) {
             enemy.attackMelee(hero, rand.nextInt(1000));
-            System.out.println(Colors.GREEN + hero.getHpMp() + Colors.RESET);
+            System.out.println(Colors.GREEN_BOLD + hero.getHpMp() + Colors.RESET);
         } else {
             isFinished = true;
             victory = true;
@@ -48,7 +48,7 @@ public class BattleField {
     }
 
     private void flee() {
-        System.out.println("You run away from " + enemy.getName());
+        System.out.println(Colors.YELLOW + "You run away from " + enemy.getName() + Colors.RESET);
         victory = false;
         isFinished = true;
     }
@@ -56,11 +56,11 @@ public class BattleField {
     private void finishBattle() {
 
         if (victory) {
-            System.out.println(hero.getName() + " Won the battle.");
+            System.out.println(Colors.GREEN_BOLD + hero.getName() + " won the battle." + Colors.RESET);
             hero.addExperience(enemy.getExpForKill());
             generateLoot();
         } else {
-            System.out.println(enemy.getName() + " Won the battle.");
+            System.out.println(Colors.RED_BOLD + enemy.getName() + " won the battle." + Colors.RESET);
         }
     }
 
@@ -77,7 +77,7 @@ public class BattleField {
         isFinished = false;
         this.hero = hero;
         this.enemy = enemy;
-        System.out.println(hero.getHeroStatus() + " VS " + enemy.getEnemyStatus());
+        System.out.println(hero.getHeroStatus() + Colors.CYAN_BOLD + " VS " + enemy.getEnemyStatus());
         while (!isFinished) {
             battleMainMenu();
         }

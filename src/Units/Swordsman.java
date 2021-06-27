@@ -9,6 +9,7 @@ public class Swordsman extends Character{
         strength = 50;
         agility = 250;
         intellect = 5;
+        addGold(1000000);
         recalculateStats();
         currentHP = maxHP;
         currentMP = maxMP;

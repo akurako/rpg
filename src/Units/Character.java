@@ -23,7 +23,7 @@ public class Character extends Unit {
 
 
     public boolean payGold(int gold) {
-        if (this.gold < gold){
+        if (this.gold < gold) {
             System.out.println(Colors.YELLOW + "You have not enough gold." + Colors.RESET);
             return false;
         } else {
@@ -34,7 +34,7 @@ public class Character extends Unit {
 
     public void addGold(int gold) {
         this.gold += gold;
-        System.out.println(Colors.YELLOW + gold +" gold added to your inventory.");
+        System.out.println(Colors.YELLOW + gold + " gold added to your inventory.");
     }
 
     public Town getHomeTown() {
@@ -72,7 +72,7 @@ public class Character extends Unit {
     }
 
     public String getLvlExpStatus() {
-        return Colors.GREEN_BOLD + "[" + name + "][" + getExperience() + "/" + expTable[level + 1] + " exp]"+ Colors.RESET;
+        return Colors.GREEN_BOLD + "[" + name + "][" + getExperience() + "/" + expTable[level + 1] + " exp]" + Colors.RESET;
     }
 
     public void addExperience(int amount) {
@@ -86,7 +86,7 @@ public class Character extends Unit {
         statsAvailable += 5;
         experience = 0;
         level++;
-        System.out.println("You become stronger.");
+        System.out.println(Colors.YELLOW_BOLD + "You become stronger." + Colors.RESET);
     }
 
 
@@ -128,7 +128,7 @@ public class Character extends Unit {
             if (currentHP > maxMP) {
                 currentHP = maxHP;
             }
-            System.out.println("You drink a healing potion and replenish " + (currentHP - startHP) + " HP");
+            System.out.println(Colors.YELLOW + "You drink a healing potion and replenish " + (currentHP - startHP) + " HP" + Colors.RESET);
         }
         if (potion.getPotionType().equals("mana")) {
             int startMP = currentMP;
@@ -137,13 +137,17 @@ public class Character extends Unit {
             if (currentMP > maxMP) {
                 currentMP = maxMP;
             }
-            System.out.println("You drink a mana potion and replenish " + (currentMP - startMP) + " MP");
+            System.out.println(Colors.YELLOW + "You drink a mana potion and replenish " + (currentMP - startMP) + " MP" + Colors.RESET);
         }
         if (potion.getCount() > 1) {
             potion.useOne();
         } else {
             removeFromInventory(potion);
         }
+    }
+
+    public void showGoldAmount() {
+        System.out.println(Colors.YELLOW + "You have " + gold + " gold." + Colors.RESET);
     }
 
     public void removeFromInventory(Item item) {
@@ -159,11 +163,13 @@ public class Character extends Unit {
         for (Item item : inventory) {
             if (item instanceof Potion) {
                 potionList.add(item.getName());
-                System.out.println(inputNumber + ". " + item.getName() + " [" + ((Potion) item).getCount() + "]");
+                System.out.println(Colors.CYAN + inputNumber + ". " + item.getName() + " [" + ((Potion) item).getCount() + "]");
                 inputNumber++;
             }
         }
-        System.out.println(inputNumber + ". Back");
+        if (potionList.size() > 0) {
+            System.out.println(inputNumber + ". Back" + Colors.RESET);
+        }
         if (potionList.size() > 0) {
             int chosenItem = Integer.parseInt(userInput.nextLine());
 
@@ -177,7 +183,7 @@ public class Character extends Unit {
                 }
             }
         } else {
-            System.out.println("You dont have any potions.");
+            System.out.println(Colors.YELLOW + "You dont have any potions." + Colors.RESET);
         }
     }
 }

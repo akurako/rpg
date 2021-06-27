@@ -7,7 +7,6 @@ import Items.Potion;
 import java.util.ArrayList;
 
 public class NPC extends Unit {
-    String name;
     ArrayList<Item> shop = new ArrayList<>();
 
     public NPC(String name) {

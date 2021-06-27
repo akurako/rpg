@@ -1,5 +1,4 @@
 import Interfaces.Colors;
-import Items.Armor;
 import Items.Item;
 import Items.ItemGenerator;
 import Items.Potion;
@@ -44,7 +43,7 @@ public class Game {
         System.out.println(Colors.CYAN_BOLD + "Choose a name for your hero." + Colors.RESET);
         name = userInput.nextLine();
         clearScreen();
-        System.out.println(Colors.CYAN_BOLD + "Choose hero specialization " + Colors.CYAN + " \n 1. Swordsman\n 2. Mage (Work in progress)\n 3.Archer (Work in progress)" + Colors.RESET);
+        System.out.println(Colors.CYAN_BOLD + "Choose hero specialization " + Colors.CYAN + " \n 1. Swordsman\n 2. Mage (Work in progress)\n 3. Archer (Work in progress)" + Colors.RESET);
         type = Integer.parseInt(userInput.nextLine());
         clearScreen();
         switch (type) {
@@ -132,16 +131,19 @@ public class Game {
 
 
     public void sellPotionDialog() {
+        hero.showGoldAmount();
         int inputNumber = 1;
         ArrayList<String> potionList = new ArrayList<>();
         for (Item item : hero.getInventory()) {
             if (item instanceof Potion) {
                 potionList.add(item.getName());
-                System.out.println(inputNumber + ". " + item.getName() + " [" + ((Potion) item).getCount() + "][Sell price: " + item.getSellPrice() + " gold]");
+                System.out.println(Colors.CYAN + inputNumber + ". " + item.getName() + " [" + ((Potion) item).getCount() + "][Sell price: " + item.getSellPrice() + " gold]");
                 inputNumber++;
             }
         }
-        System.out.println(inputNumber + ". Back");
+        if (potionList.size() != 0) {
+            System.out.println(inputNumber + ". Back" + Colors.RESET);
+        }
         if (potionList.size() > 0) {
             int chosenItem = Integer.parseInt(userInput.nextLine());
 
@@ -155,7 +157,7 @@ public class Game {
                 }
             }
         } else {
-            System.out.println("You dont have any potions.");
+            System.out.println(Colors.YELLOW + "You dont have any potions." + Colors.RESET);
         }
     }
 
@@ -189,7 +191,7 @@ public class Game {
     private void dungeonDialog() {
 
         if (enemy == null) {
-            System.out.println(Colors.CYAN + currentLocation.getName() + "\n 1. Explore\n 2. Go back to " + currentTown.getName() + Colors.RESET);
+            System.out.println(Colors.CYAN_BOLD + "You entering " + currentLocation.getName() + Colors.CYAN + "\n 1. Explore\n 2. Go back to " + currentTown.getName() + Colors.RESET);
             switch (userInput.nextLine()) {
                 case "1" -> exploreDungeon();
                 case "2" -> currentLocation = currentTown;
@@ -197,7 +199,7 @@ public class Game {
                 }
             }
         } else {
-            System.out.println(Colors.CYAN + "Start a fight?\n 1. YES\n 2. RUN" + Colors.RESET);
+            System.out.println(Colors.CYAN_BOLD + "Start a fight? " + Colors.CYAN + "\n 1. YES\n 2. RUN" + Colors.RESET);
             switch (userInput.nextLine()) {
                 case "1" -> startBattle();
                 case "2" -> enemy = null;
@@ -217,7 +219,7 @@ public class Game {
     private void cityDoctorDialog() {
         boolean closeDialog = false;
         while (!closeDialog) {
-            System.out.println("Welcome to " + currentTown.getName() + " town alchemist.\n 1. Buy potions.\n 2. Sell potions.\n 3. Get healed. [100 gold]\n 4. Back to town.");
+            System.out.println(Colors.CYAN_BOLD + "Town alchemist " + currentTown.townAlchemist.getName() + " welcomes you." + Colors.CYAN + "\n 1. Buy potions.\n 2. Sell potions.\n 3. Get healed. [100 gold]\n 4. Back to town." + Colors.RESET);
             switch (userInput.nextLine()) {
                 case "1" -> buyPotionsDialog();
                 case "2" -> sellPotionDialog();
@@ -228,16 +230,17 @@ public class Game {
     }
 
     private void buyPotionsDialog() {
+        hero.showGoldAmount();
         int inputNumber = 1;
         ArrayList<String> potionList = new ArrayList<>();
         for (Item item : currentTown.townAlchemist.getShopItems()) {
             if (item instanceof Potion) {
                 potionList.add(item.getName());
-                System.out.println(inputNumber + ". " + item.getName() + " [" + ((Potion) item).getCount() + "][Buy price: " + item.getBuyPrice() + " gold]");
+                System.out.println(Colors.CYAN + inputNumber + ". " + item.getName() + " [" + ((Potion) item).getCount() + "][Buy price: " + item.getBuyPrice() + " gold]");
                 inputNumber++;
             }
         }
-        System.out.println(inputNumber + ". Back");
+        System.out.println(inputNumber + ". Back" + Colors.RESET);
         if (potionList.size() > 0) {
             int chosenItem = Integer.parseInt(userInput.nextLine());
 
@@ -264,7 +267,7 @@ public class Game {
     }
 
     private void townDialog() {
-        System.out.println(Colors.CYAN + "Welcome to the " + currentTown.getName() + " town.\n 1. Go to " + currentTown.townDungeon.getName() + "\n 2. Go to town alchemist." + Colors.RESET);
+        System.out.println(Colors.CYAN_BOLD + "Welcome to the " + currentTown.getName() + " town." + Colors.CYAN + "\n 1. Go to " + currentTown.townDungeon.getName() + "\n 2. Go to town alchemist." + Colors.RESET);
         switch (userInput.nextLine()) {
             case "1" -> currentLocation = currentTown.townDungeon;
             case "2" -> cityDoctorDialog();
