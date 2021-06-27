@@ -119,6 +119,27 @@ public class Game implements Serializable {
         }
     }
 
+    public void characterMenu() {
+        String statsNum;
+        long dodgeChance = hero.getDodgeChance() / 10;
+        System.out.println(hero.getHeroStatus());
+        hero.showGoldAmount();
+        System.out.println(Colors.CYAN_BOLD + " Main Stats:\n" + Colors.CYAN + " Strength [" + hero.getStrength() + "]\n Agility [" + hero.getAgility() + "]\n Intellect [" + hero.getIntellect() + "]\n Unallocated Stats [" + hero.getStatsAvailable() + "]" + Colors.RESET);
+        System.out.println(Colors.CYAN_BOLD + " Secondary Stats:\n" + Colors.CYAN + " Dodge chance: " + dodgeChance + "%");
+        if (hero.getStatsAvailable() == 0) {
+            statsNum = "999";
+            System.out.println(Colors.CYAN + " 1. Back");
+        } else {
+            statsNum = "1";
+            System.out.println(" 1. Relocate available stats.");
+            System.out.println(" 2. Back."+ Colors.RESET);
+        }
+        if (userInput.nextLine().equals(statsNum)){
+            statsAvailableDialog();
+        }
+    }
+
+
     public void sellPotionDialog() {
         hero.showGoldAmount();
         int inputNumber = 1;
@@ -251,11 +272,13 @@ public class Game implements Serializable {
 
                 "\n 1. Go to town alchemist." +
                 "\n 2. Go to " + currentTown.townDungeon.getName() + "." +
-                "\n 3. Save character and exit to main menu." + Colors.RESET);
+                "\n 3. Character info." +
+                "\n 4. Save character and exit to main menu." + Colors.RESET);
         switch (userInput.nextLine()) {
             case "1" -> cityDoctorDialog();
             case "2" -> currentLocation = currentTown.townDungeon;
-            case "3" -> {
+            case "3" -> characterMenu();
+            case "4" -> {
                 saveCharacter();
                 gameRunning = false;
             }

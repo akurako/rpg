@@ -23,6 +23,9 @@ public class Unit implements Serializable {
     int statsAvailable;
 
     //GETTERS AND SETTERS-----------------------------------------------------------------------------------------------
+    public int getDodgeChance(){
+        return dodgeChance;
+    }
 
     public int getStatsAvailable() {
         return statsAvailable;
