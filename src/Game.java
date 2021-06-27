@@ -1,5 +1,8 @@
 import Interfaces.Colors;
+import Items.Armor;
+import Items.Item;
 import Items.ItemGenerator;
+import Items.Potion;
 import Locations.Dungeons.Dungeon;
 import Locations.Dungeons.DungeonGenerator;
 import Locations.Location;
@@ -19,6 +22,7 @@ public class Game {
     public static Scanner userInput = new Scanner(System.in);
     static TownGenerator townGenerator = new TownGenerator();
     ArrayList<Location> knownLocations = new ArrayList<>();
+    static NPCGenerator ng = new NPCGenerator();
     static ItemGenerator ig = new ItemGenerator();
     static EnemyGenerator eg = new EnemyGenerator();
     static DungeonGenerator dg = new DungeonGenerator();
@@ -29,7 +33,6 @@ public class Game {
     BattleField battle;
     Town currentTown;
     Location currentLocation;
-    Boolean inTown;
 
 
 //CHARACTER CREATION, SAVE AND LOADING----------------------------------------------------------------------------------
@@ -121,9 +124,54 @@ public class Game {
         currentLocation = currentTown;
         currentTown.townDungeon = dg.generateDungeon();
         dg.fillDungeon(hero, currentTown.townDungeon);
+        currentTown.townAlchemist = ng.generateNPC();
+        currentTown.townAlchemist.generatePotions(20);
     }
 
 //UNSORTED--------------------------------------------------------------------------------------------------------------
+
+
+    public void sellPotionDialog() {
+        int inputNumber = 1;
+        ArrayList<String> potionList = new ArrayList<>();
+        for (Item item : hero.getInventory()) {
+            if (item instanceof Potion) {
+                potionList.add(item.getName());
+                System.out.println(inputNumber + ". " + item.getName() + " [" + ((Potion) item).getCount() + "][Sell price: " + item.getSellPrice() + " gold]");
+                inputNumber++;
+            }
+        }
+        System.out.println(inputNumber + ". Back");
+        if (potionList.size() > 0) {
+            int chosenItem = Integer.parseInt(userInput.nextLine());
+
+            if (chosenItem <= potionList.size()) {
+                for (Item item : hero.getInventory()) {
+                    if (item.getName().equals(potionList.get(chosenItem - 1))) {
+
+                        sellItem(item);
+                        break;
+                    }
+                }
+            }
+        } else {
+            System.out.println("You dont have any potions.");
+        }
+    }
+
+    private void sellItem(Item item) {
+        if (item instanceof Potion) {
+            if (((Potion) item).getCount() > 1) {
+                ((Potion) item).useOne();
+            } else {
+                hero.removeFromInventory(item);
+            }
+            hero.addGold(item.getSellPrice());
+        } else {
+            hero.addGold(item.getSellPrice());
+            hero.removeFromInventory(item);
+        }
+    }
 
     private void mainMenuDialog() {
         System.out.println(Colors.CYAN_BOLD + "Welcome to the game." + Colors.CYAN + "\n 1. Create a new character.\n 2. Load character." + Colors.RESET);
@@ -166,10 +214,60 @@ public class Game {
         System.out.println(Colors.RED + "Enemy appeared " + enemy.getName() + " LVL:" + enemy.getLevel() + Colors.RESET);
     }
 
+    private void cityDoctorDialog() {
+        boolean closeDialog = false;
+        while (!closeDialog) {
+            System.out.println("Welcome to " + currentTown.getName() + " town alchemist.\n 1. Buy potions.\n 2. Sell potions.\n 3. Get healed. [100 gold]\n 4. Back to town.");
+            switch (userInput.nextLine()) {
+                case "1" -> buyPotionsDialog();
+                case "2" -> sellPotionDialog();
+                case "3" -> getHealed();
+                default -> closeDialog = true;
+            }
+        }
+    }
+
+    private void buyPotionsDialog() {
+        int inputNumber = 1;
+        ArrayList<String> potionList = new ArrayList<>();
+        for (Item item : currentTown.townAlchemist.getShopItems()) {
+            if (item instanceof Potion) {
+                potionList.add(item.getName());
+                System.out.println(inputNumber + ". " + item.getName() + " [" + ((Potion) item).getCount() + "][Buy price: " + item.getBuyPrice() + " gold]");
+                inputNumber++;
+            }
+        }
+        System.out.println(inputNumber + ". Back");
+        if (potionList.size() > 0) {
+            int chosenItem = Integer.parseInt(userInput.nextLine());
+
+            if (chosenItem <= potionList.size()) {
+                for (Item item : currentTown.townAlchemist.getShopItems()) {
+                    if (item.getName().equals(potionList.get(chosenItem - 1))) {
+                        if (hero.payGold(item.getBuyPrice())) {
+                            hero.addToInventory(item);
+                            currentTown.townAlchemist.removeFromShop(item);
+                        }
+                        break;
+                    }
+                }
+            }
+        } else {
+            System.out.println("Store is empty");
+        }
+    }
+
+    private void getHealed() {
+        if (hero.payGold(100)) {
+            hero.restoreHpMp();
+        }
+    }
+
     private void townDialog() {
-        System.out.println(Colors.CYAN + "Welcome to the " + currentTown.getName() + " town.\n1. Go to " + currentTown.townDungeon.getName() + Colors.RESET);
+        System.out.println(Colors.CYAN + "Welcome to the " + currentTown.getName() + " town.\n 1. Go to " + currentTown.townDungeon.getName() + "\n 2. Go to town alchemist." + Colors.RESET);
         switch (userInput.nextLine()) {
             case "1" -> currentLocation = currentTown.townDungeon;
+            case "2" -> cityDoctorDialog();
         }
     }
 

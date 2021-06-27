@@ -52,6 +52,11 @@ public class Unit implements Serializable {
         this.dodgeChance = baseDodgeChance + (agility * 2);
     }
 
+    public void restoreHpMp(){
+        currentMP = maxMP;
+        currentHP = maxHP;
+    }
+
     //IN BATTLE METHODS-------------------------------------------------------------------------------------------------
 
     public void attackMelee(Unit enemy, int randomNumber) {
@@ -62,5 +67,6 @@ public class Unit implements Serializable {
             System.out.println(Colors.YELLOW + enemy.name + " avoided attack." + Colors.RESET);
         }
     }
+
 
 }

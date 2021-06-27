@@ -12,9 +12,18 @@ public class Potion extends Item {
         recoveryPercentage = size;
         weight = size * 10;
         switch (recoveryPercentage) {
-            case 25 -> this.name = "Small";
-            case 50 -> this.name = "Medium";
-            case 100 -> this.name = "Big";
+            case 25 -> {
+                this.buyPrice = 100;
+                this.name = "Small";
+            }
+            case 50 -> {
+                this.name = "Medium";
+                this.buyPrice = 300;
+            }
+            case 100 -> {
+                this.name = "Big";
+                this.buyPrice = 500;
+            }
         }
 
         if (type.equals("heal")) {
@@ -34,12 +43,12 @@ public class Potion extends Item {
         return potionType;
     }
 
-    public void addOne(){
+    public void addOne() {
         count++;
         stackWeight += weight;
     }
 
-    public void useOne(){
+    public void useOne() {
         count--;
         stackWeight -= weight;
     }

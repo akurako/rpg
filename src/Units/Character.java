@@ -15,10 +15,27 @@ public class Character extends Unit {
     ArrayList<Item> inventory = new ArrayList<>();
     int inventoryMaxWeight = 10000;
     int inventoryCurrentWeight = 0;
+    private int gold;
     Town homeTown;
     boolean newCharacter;
 
     //GETTERS AND SETTERS-----------------------------------------------------------------------------------------------
+
+
+    public boolean payGold(int gold) {
+        if (this.gold < gold){
+            System.out.println(Colors.YELLOW + "You have not enough gold." + Colors.RESET);
+            return false;
+        } else {
+            this.gold -= gold;
+            return true;
+        }
+    }
+
+    public void addGold(int gold) {
+        this.gold += gold;
+        System.out.println(Colors.YELLOW + gold +" gold added to your inventory.");
+    }
 
     public Town getHomeTown() {
         return homeTown;
