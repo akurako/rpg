@@ -17,7 +17,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 
-public class Game {
+public class Game implements Serializable {
     public static Scanner userInput = new Scanner(System.in);
     static TownGenerator townGenerator = new TownGenerator();
     ArrayList<Location> knownLocations = new ArrayList<>();
@@ -32,6 +32,7 @@ public class Game {
     BattleField battle;
     Town currentTown;
     Location currentLocation;
+    Boolean gameRunning = true;
 
 
 //CHARACTER CREATION, SAVE AND LOADING----------------------------------------------------------------------------------
@@ -69,6 +70,7 @@ public class Game {
             saveDirectory.mkdir();
         }
         try {
+            hero.setSavedGameState(this);
             FileOutputStream fileOut = new FileOutputStream(filename);
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
             objectOut.writeObject(hero);
@@ -78,43 +80,6 @@ public class Game {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    private void loadCharacterDialog() {
-        File characterFile = null;
-        final File saveDirectory = new File("SavedCharacters");
-        if (saveDirectory.length() == 0) {
-            System.out.println("You dont have any saved characters.");
-        }
-        while (characterFile == null && saveDirectory.list().length != 0) {
-            System.out.println("Choose character you want to load:\n" + Arrays.toString(saveDirectory.list()));
-            characterFile = new File(saveDirectory + "/" + userInput.nextLine());
-            if (!characterFile.exists()) {
-                System.out.println("Incorrect character name.");
-                characterFile = null;
-            } else {
-                loadCharacter(characterFile);
-            }
-        }
-    }
-
-    private void loadCharacter(File characterFile) {
-        try {
-            FileInputStream fileIn = new FileInputStream(characterFile);
-            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-            hero = (Character) objectIn.readObject();
-            fileIn.close();
-            objectIn.close();
-
-        } catch (InvalidClassException e) {
-            e.printStackTrace();
-            System.out.println("Savegame version and game version mismatch.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        System.out.println(hero.getName() + " Successfully loaded");
     }
 
     private void initializeNewCharacter() {
@@ -172,15 +137,6 @@ public class Game {
         } else {
             hero.addGold(item.getSellPrice());
             hero.removeFromInventory(item);
-        }
-    }
-
-    private void mainMenuDialog() {
-        System.out.println(Colors.CYAN_BOLD + "Welcome to the game." + Colors.CYAN + "\n 1. Create a new character.\n 2. Load character." + Colors.RESET);
-        switch (userInput.nextLine()) {
-            case "1" -> createNewCharacterDialog();
-            case "2" -> loadCharacterDialog();
-            default -> System.out.println("Unknown Command");
         }
     }
 
@@ -267,10 +223,18 @@ public class Game {
     }
 
     private void townDialog() {
-        System.out.println(Colors.CYAN_BOLD + "Welcome to the " + currentTown.getName() + " town." + Colors.CYAN + "\n 1. Go to " + currentTown.townDungeon.getName() + "\n 2. Go to town alchemist." + Colors.RESET);
+        System.out.println(Colors.CYAN_BOLD + "Welcome to the " + currentTown.getName() + " town." + Colors.CYAN + "" +
+
+                "\n 1. Go to town alchemist." +
+                "\n 2. Go to " + currentTown.townDungeon.getName() + "." +
+                "\n 3. Save character and exit to main menu." + Colors.RESET);
         switch (userInput.nextLine()) {
-            case "1" -> currentLocation = currentTown.townDungeon;
-            case "2" -> cityDoctorDialog();
+            case "1" -> cityDoctorDialog();
+            case "2" -> currentLocation = currentTown.townDungeon;
+            case "3" -> {
+                saveCharacter();
+                gameRunning = false;
+            }
         }
     }
 
@@ -284,9 +248,10 @@ public class Game {
 
     //MAIN GAME SYSTEM------------------------------------------------------------------------------------------------------
     public void startGame() {
-        while (true) {
+        gameRunning = true;
+        while (gameRunning) {
             if (hero == null) {
-                mainMenuDialog();
+                createNewCharacterDialog();
             } else {
                 if (battle == null) {
                     if (currentLocation instanceof Town) {

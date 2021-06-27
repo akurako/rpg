@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class TownGenerator {
+public class TownGenerator implements Serializable{
     ArrayList<String> townNames = new ArrayList<>();
 
     public TownGenerator() {

@@ -3,15 +3,12 @@ package Locations.Dungeons;
 import Units.Character;
 import Units.EnemyGenerator;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class DungeonGenerator {
+public class DungeonGenerator implements Serializable {
     ArrayList<String> dungeonNames = new ArrayList<>();
 
     public DungeonGenerator(){

@@ -1,6 +1,8 @@
 package Locations;
 
-public class Location {
+import java.io.Serializable;
+
+public class Location implements Serializable {
     protected String name;
 
     public String getName() {

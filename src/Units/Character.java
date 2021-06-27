@@ -17,10 +17,18 @@ public class Character extends Unit {
     int inventoryCurrentWeight = 0;
     private int gold;
     Town homeTown;
-    boolean newCharacter;
+    Object savedGameState;
 
     //GETTERS AND SETTERS-----------------------------------------------------------------------------------------------
 
+
+    public Object getSavedGameState() {
+        return savedGameState;
+    }
+
+    public void setSavedGameState(Object savedGameState) {
+        this.savedGameState = savedGameState;
+    }
 
     public boolean payGold(int gold) {
         if (this.gold < gold) {

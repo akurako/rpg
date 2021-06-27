@@ -2,15 +2,12 @@ package Units;
 
 import Locations.Towns.Town;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class NPCGenerator {
+public class NPCGenerator implements Serializable {
     ArrayList<String> npcNames = new ArrayList<>();
 
     public NPCGenerator() {

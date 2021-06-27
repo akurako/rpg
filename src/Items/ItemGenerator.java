@@ -1,9 +1,10 @@
 package Items;
 
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class ItemGenerator {
+public class ItemGenerator implements Serializable {
  private static Random random = new Random();
 
     public static Potion generatePotion() {
