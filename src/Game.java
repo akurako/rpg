@@ -86,13 +86,19 @@ public class Game implements Serializable {
         hero.setHomeTown(townGenerator.generateTown());
         currentTown = hero.getHomeTown();
         currentLocation = currentTown;
-        currentTown.townDungeon = dg.generateDungeon();
-        dg.fillDungeon(hero, currentTown.townDungeon);
+        currentTown.townDungeon = dg.generateDungeon(hero);
         currentTown.townAlchemist = ng.generateNPC();
-        currentTown.townAlchemist.generatePotions(20);
+        knownLocations.add(currentTown);
     }
 
 //UNSORTED--------------------------------------------------------------------------------------------------------------
+    public void travelToNextTown(){
+        currentTown = tg.generateTown();
+        currentLocation = currentTown;
+        knownLocations.add(currentTown);
+        currentTown.townAlchemist = ng.generateNPC();
+        currentTown.townDungeon = dg.generateDungeon(hero);
+    }
 
     public void statsAvailableDialog() {
         Boolean closeDialog = false;
@@ -121,24 +127,24 @@ public class Game implements Serializable {
 
     public void characterMenu() {
         String statsNum;
+        long criticalChance = hero.getCriticalChance() / 10;
         long dodgeChance = hero.getDodgeChance() / 10;
         System.out.println(hero.getHeroStatus());
         hero.showGoldAmount();
         System.out.println(Colors.CYAN_BOLD + " Main Stats:\n" + Colors.CYAN + " Strength [" + hero.getStrength() + "]\n Agility [" + hero.getAgility() + "]\n Intellect [" + hero.getIntellect() + "]\n Unallocated Stats [" + hero.getStatsAvailable() + "]" + Colors.RESET);
-        System.out.println(Colors.CYAN_BOLD + " Secondary Stats:\n" + Colors.CYAN + " Dodge chance: " + dodgeChance + "%");
+        System.out.println(Colors.CYAN_BOLD + " Secondary Stats:\n" + Colors.CYAN + " Dodge chance: " + dodgeChance + "%\n Critical chance: "+criticalChance + "%");
         if (hero.getStatsAvailable() == 0) {
             statsNum = "999";
             System.out.println(Colors.CYAN + " 1. Back");
         } else {
             statsNum = "1";
             System.out.println(" 1. Relocate available stats.");
-            System.out.println(" 2. Back."+ Colors.RESET);
+            System.out.println(" 2. Back." + Colors.RESET);
         }
-        if (userInput.nextLine().equals(statsNum)){
+        if (userInput.nextLine().equals(statsNum)) {
             statsAvailableDialog();
         }
     }
-
 
     public void sellPotionDialog() {
         hero.showGoldAmount();
@@ -212,9 +218,13 @@ public class Game implements Serializable {
     }
 
     private void exploreDungeon() {
-        Random rand = new Random();
-        enemy = ((Dungeon) currentLocation).getLocationEnemies().get(rand.nextInt(((Dungeon) currentLocation).getLocationEnemies().size()));
-        System.out.println(Colors.RED + "Enemy appeared " + enemy.getName() + " LVL:" + enemy.getLevel() + Colors.RESET);
+        if (((Dungeon) currentLocation).finished){
+            System.out.println(Colors.CYAN_BOLD + "You cleared this dungeon, nothing to do here for now." + Colors.RESET);
+        } else {
+            Random rand = new Random();
+            enemy = ((Dungeon) currentLocation).getLocationEnemies().get(rand.nextInt(((Dungeon) currentLocation).getLocationEnemies().size()));
+            System.out.println(Colors.RED + "Enemy appeared " + enemy.getName() + " LVL:" + enemy.getLevel() + Colors.RESET);
+        }
     }
 
     private void cityDoctorDialog() {
@@ -273,7 +283,10 @@ public class Game implements Serializable {
                 "\n 1. Go to town alchemist." +
                 "\n 2. Go to " + currentTown.townDungeon.getName() + "." +
                 "\n 3. Character info." +
-                "\n 4. Save character and exit to main menu." + Colors.RESET);
+                "\n 4. Save character and exit to main menu." );
+        if (currentTown.townDungeon.finished){
+            System.out.println(" 5. Travel to the next town." + Colors.RESET);
+        }
         switch (userInput.nextLine()) {
             case "1" -> cityDoctorDialog();
             case "2" -> currentLocation = currentTown.townDungeon;
@@ -282,13 +295,23 @@ public class Game implements Serializable {
                 saveCharacter();
                 gameRunning = false;
             }
+            case "5" -> {
+                if (currentTown.townDungeon.finished) {
+                    travelToNextTown();
+                }
+            }
         }
     }
 
     private void startBattle() {
         battle = new BattleField();
         battle.getScannerControl(userInput);
-        battle.startBattle(hero, enemy);
+        if (battle.startBattle(hero, enemy)){
+            ((Dungeon) currentLocation).enemyDied(enemy);
+            if (((Dungeon) currentLocation).finished){
+                //TODO GET REWARD
+            }
+        }
         enemy = null;
         battle = null;
         if (hero.getStatsAvailable() > 0) {

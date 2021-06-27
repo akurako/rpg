@@ -31,10 +31,10 @@ public class BattleField {
     }
 
     private void attack() {
-        hero.attackMelee(enemy, rand.nextInt(1000));
+        hero.attackMelee(enemy);
         System.out.println(Colors.RED_BOLD + enemy.getHpMp() + Colors.RESET);
         if (enemy.getHp() > 0) {
-            enemy.attackMelee(hero, rand.nextInt(1000));
+            enemy.attackMelee(hero);
             System.out.println(Colors.GREEN_BOLD + hero.getHpMp() + Colors.RESET);
         } else {
             isFinished = true;
@@ -53,14 +53,16 @@ public class BattleField {
         isFinished = true;
     }
 
-    private void finishBattle() {
+    private boolean finishBattle() {
 
         if (victory) {
             System.out.println(Colors.GREEN_BOLD + hero.getName() + " won the battle." + Colors.RESET);
             hero.addExperience(enemy.getExpForKill());
             generateLoot();
+            return true;
         } else {
             System.out.println(Colors.RED_BOLD + enemy.getName() + " won the battle." + Colors.RESET);
+            return false;
         }
     }
 
@@ -73,7 +75,7 @@ public class BattleField {
     }
 
     //MAIN BATTLE SYSTEM------------------------------------------------------------------------------------------------
-    public void startBattle(Character hero, Enemy enemy) {
+    public boolean startBattle(Character hero, Enemy enemy) {
         victory = false;
         isFinished = false;
         this.hero = hero;
@@ -82,7 +84,12 @@ public class BattleField {
         while (!isFinished) {
             battleMainMenu();
         }
-        finishBattle();
+        if (finishBattle()) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
 }

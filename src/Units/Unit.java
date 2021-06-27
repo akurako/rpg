@@ -3,6 +3,7 @@ package Units;
 import Interfaces.Colors;
 
 import java.io.Serializable;
+import java.util.Random;
 
 public class Unit implements Serializable {
 
@@ -10,6 +11,8 @@ public class Unit implements Serializable {
     final int baseHP = 100;
     final int baseMP = 50;
     final int baseDodgeChance = 50;
+    final int baseCriticalChance = 50;
+    int criticalChance;
     int dodgeChance;
     int level;
     int experience;
@@ -25,6 +28,10 @@ public class Unit implements Serializable {
     //GETTERS AND SETTERS-----------------------------------------------------------------------------------------------
     public int getDodgeChance(){
         return dodgeChance;
+    }
+
+    public int getCriticalChance() {
+        return criticalChance;
     }
 
     public int getStatsAvailable() {
@@ -85,6 +92,7 @@ public class Unit implements Serializable {
         this.maxHP = baseHP + (strength * 10);
         this.maxMP = baseMP + (intellect * 5);
         this.dodgeChance = baseDodgeChance + (agility * 2);
+        this.criticalChance = baseCriticalChance + (agility * 2);
     }
 
     public void restoreHpMp(){
@@ -94,10 +102,17 @@ public class Unit implements Serializable {
 
     //IN BATTLE METHODS-------------------------------------------------------------------------------------------------
 
-    public void attackMelee(Unit enemy, int randomNumber) {
-        if (randomNumber > enemy.dodgeChance) {
-            enemy.currentHP -= this.strength;
-            System.out.println(Colors.YELLOW + this.name + " attacks " + enemy.name + " for " + this.strength + Colors.RESET);
+    public void attackMelee(Unit enemy) {
+        Random rand = new Random();
+        if (rand.nextInt(1000) >= enemy.dodgeChance) {
+            if (rand.nextInt(1000) <= criticalChance) {
+                int dmg = this.strength*2;
+                enemy.currentHP -= dmg;
+                System.out.println(Colors.YELLOW + this.name + " attacks " + enemy.name + " with critical hit for " + dmg + Colors.RESET);
+            } else {
+                enemy.currentHP -= this.strength;
+                System.out.println(Colors.YELLOW + this.name + " attacks " + enemy.name + " for " + this.strength + Colors.RESET);
+            }
         } else {
             System.out.println(Colors.YELLOW + enemy.name + " avoided attack." + Colors.RESET);
         }

@@ -31,12 +31,16 @@ public class DungeonGenerator implements Serializable {
         }
     }
 
-    public Dungeon generateDungeon(){
+    public Dungeon generateDungeon(Character hero){
         Random rand = new Random();
         int randomNumber = rand.nextInt(dungeonNames.size());
         String name = dungeonNames.get(randomNumber);
         dungeonNames.remove(randomNumber);
-        return new Dungeon(name);
+        Dungeon generatedDungeon = new Dungeon(name);
+        for (int i = 0; i < generatedDungeon.numberOfEnemies ; i++) {
+            generatedDungeon.locationEnemies.add(new EnemyGenerator().generateEnemy(hero));
+        }
+        return generatedDungeon;
     }
 
     public void fillDungeon(Character hero, Dungeon dungeon){

@@ -40,13 +40,13 @@ public class Main {
 
         } catch (InvalidClassException e) {
             e.printStackTrace();
-            System.out.println("Savegame version and game version mismatch.");
+            System.out.println(Colors.RED_BOLD + "Savegame version and game version mismatch." + Colors.RESET);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        System.out.println(game.hero.getName() + " Successfully loaded");
+        System.out.println(Colors.YELLOW_BOLD + game.hero.getName() + " Successfully loaded" + Colors.RESET);
     }
 
     private static void mainMenuDialog() {
@@ -70,9 +70,8 @@ public class Main {
     }
 }
 
-//TODO PRIOR IF DUNGEON ARE CLEARED TRAVEL TO OTHER TOWN + REWARD;
 //TODO PRIOR when you die return to town and gold penalty?
-//TODO PRIOR critical hit chance.
+//TODO PRIOR OPTIMIZE CODE BEFORE DEADLINE
 
 //TODO PASSIVE , ACTIVE SKILLS
 //TODO WEARABLES ARMOR WEAPONS ETC + PRICES
@@ -81,4 +80,5 @@ public class Main {
 //TODO FIX COLORS IN ALL DIALOGS
 //TODO TELEPORT BETWEEN CITIES
 //TODO SHOW MESSAGE IF DUNGEON CLEARED
-//TODO OPTIMIZE CODE BEFORE DEADLINE
+//TODO REWARD FOR DUNGEON COMPLETION
+//TODO SKILLBOOKS DROP

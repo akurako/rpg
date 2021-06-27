@@ -7,7 +7,7 @@ public class Swordsman extends Character{
         level = 1;
         this.name = name;
         strength = 50;
-        agility = 25;
+        agility = 250;
         intellect = 5;
         addGold(1000);
         recalculateStats();

@@ -5,12 +5,17 @@ import Items.ItemGenerator;
 import Items.Potion;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class NPC extends Unit {
     ArrayList<Item> shop = new ArrayList<>();
-
+    private final int minPotions = 20;
+    private final int maxPotions = 50;
+    private final int potionsAmount;
     public NPC(String name) {
         this.name = name;
+        this.potionsAmount = minPotions + (new Random().nextInt(maxPotions - minPotions));
+        generatePotions(potionsAmount);
     }
 
     public ArrayList<Item> getShopItems() {
