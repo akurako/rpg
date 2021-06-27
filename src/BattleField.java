@@ -65,8 +65,9 @@ public class BattleField {
     }
 
     private void generateLoot() {
+        System.out.println(Colors.YELLOW + "You looted a dead " + enemy.getName() + " and found:" + Colors.RESET);
+        hero.addGold(enemy.getGoldForKill());
         if (rand.nextInt(100) <= POTION_DROP_CHANCE) {
-            System.out.println(Colors.YELLOW + "You looted a dead " + enemy.getName() + " and found:" + Colors.RESET);
             hero.addToInventory(ItemGenerator.generatePotion());
         }
     }

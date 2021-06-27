@@ -5,14 +5,8 @@ import Interfaces.Colors;
 import java.util.Random;
 
 public class Enemy extends Unit {
-    private int max_gold_drop;
-
-    public int getExpForKill() {
-        return exp_for_kill;
-    }
-
-    private int exp_for_kill;
-    private int chance_for_drop_item;
+    private int goldForKill;
+    private int expForKill;
     private final int startingStats = 7;
 
     public Enemy(String name, int level) {
@@ -41,15 +35,27 @@ public class Enemy extends Unit {
         }
         recalculateStats();
         calculateExpForKill();
+        calculateGoldForKill();
         currentHP = maxHP;
         currentMP = maxMP;
 
 
     }
 
+    private void calculateGoldForKill() {
+        goldForKill = new Random().nextInt((strength + agility + intellect) * 2);
+    }
 
-    public void calculateExpForKill() {
-        exp_for_kill = (strength + agility + intellect) * level;
+    public int getGoldForKill() {
+        return goldForKill;
+    }
+
+    public int getExpForKill() {
+        return expForKill;
+    }
+
+    private void calculateExpForKill() {
+        expForKill = (strength + agility + intellect);
     }
 
     public String getEnemyStatus() {

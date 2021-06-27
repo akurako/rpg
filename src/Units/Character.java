@@ -64,7 +64,7 @@ public class Character extends Unit {
 
     //EXPERIENCE METHODS------------------------------------------------------------------------------------------------
 
-    public void generateExpTable() {
+    void generateExpTable() {
         double startValue = 100;
         double modificator = 1.15;
         for (int i = 0; i < 100; i++) {
@@ -92,7 +92,7 @@ public class Character extends Unit {
 
     public void lvlUp() {
         statsAvailable += 5;
-        experience = 0;
+        experience = experience - expTable[getLevel()-1];
         level++;
         System.out.println(Colors.YELLOW_BOLD + "You become stronger." + Colors.RESET);
     }
