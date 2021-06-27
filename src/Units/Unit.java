@@ -24,6 +24,14 @@ public class Unit implements Serializable {
 
     //GETTERS AND SETTERS-----------------------------------------------------------------------------------------------
 
+    public int getStatsAvailable() {
+        return statsAvailable;
+    }
+
+    public void setStatsAvailable(int statsAvailable) {
+        this.statsAvailable = statsAvailable;
+    }
+
     public String getName() {
         return name;
     }
@@ -34,6 +42,30 @@ public class Unit implements Serializable {
 
     public int getExperience() {
         return experience;
+    }
+
+    public int getStrength() {
+        return strength;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
+    public int getAgility() {
+        return agility;
+    }
+
+    public void setAgility(int agility) {
+        this.agility = agility;
+    }
+
+    public int getIntellect() {
+        return intellect;
+    }
+
+    public void setIntellect(int intellect) {
+        this.intellect = intellect;
     }
 
     public String getHpMp() {

@@ -94,6 +94,30 @@ public class Game implements Serializable {
 
 //UNSORTED--------------------------------------------------------------------------------------------------------------
 
+    public void statsAvailableDialog() {
+        Boolean closeDialog = false;
+        while (hero.getStatsAvailable() > 0 && !closeDialog) {
+            System.out.println(Colors.CYAN_BOLD + "You have " + hero.getStatsAvailable() + " unallocated points left." + Colors.CYAN + "\n 1. Strength [" + hero.getStrength() + "]\n 2. Agility [" + hero.getAgility() + "]\n 3. Intellect [" + hero.getIntellect() + "]\n 4. Back.");
+            switch (userInput.nextLine()) {
+                case "1" -> {
+                    hero.setStrength(hero.getStrength() + 1);
+                    hero.recalculateStats();
+                    hero.setStatsAvailable(hero.getStatsAvailable() - 1);
+                }
+                case "2" -> {
+                    hero.setAgility(hero.getAgility() + 1);
+                    hero.recalculateStats();
+                    hero.setStatsAvailable(hero.getStatsAvailable() - 1);
+                }
+                case "3" -> {
+                    hero.setIntellect(hero.getIntellect() + 1);
+                    hero.recalculateStats();
+                    hero.setStatsAvailable(hero.getStatsAvailable() - 1);
+                }
+                default -> closeDialog = true;
+            }
+        }
+    }
 
     public void sellPotionDialog() {
         hero.showGoldAmount();
@@ -244,6 +268,9 @@ public class Game implements Serializable {
         battle.startBattle(hero, enemy);
         enemy = null;
         battle = null;
+        if (hero.getStatsAvailable() > 0) {
+            statsAvailableDialog();
+        }
     }
 
     //MAIN GAME SYSTEM------------------------------------------------------------------------------------------------------

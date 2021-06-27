@@ -72,7 +72,8 @@ public class Main {
 
 //TODO PRIOR IF DUNGEON ARE CLEARED TRAVEL TO OTHER TOWN + REWARD;
 //TODO PRIOR when you die return to town and gold penalty?
-//TODO PRIOR when lvl up pop up statsAvailableDialog
+//TODO PRIOR critical hit chance.
+//TODO PRIOR character menu with all stats
 
 //TODO PASSIVE , ACTIVE SKILLS
 //TODO WEARABLES ARMOR WEAPONS ETC + PRICES
