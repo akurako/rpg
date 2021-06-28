@@ -1,4 +1,5 @@
 import Interfaces.Colors;
+import Items.Armor;
 import Items.Item;
 import Items.ItemGenerator;
 import Items.Potion;
@@ -12,7 +13,6 @@ import Units.Character;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -91,13 +91,14 @@ public class Game implements Serializable {
         knownLocations.add(currentTown);
     }
 
-//UNSORTED--------------------------------------------------------------------------------------------------------------
-    public void travelToNextTown(){
+    //UNSORTED--------------------------------------------------------------------------------------------------------------
+    public void travelToNextTown() {
         currentTown = tg.generateTown();
         currentLocation = currentTown;
         knownLocations.add(currentTown);
         currentTown.townAlchemist = ng.generateNPC();
         currentTown.townDungeon = dg.generateDungeon(hero);
+        System.out.println(Colors.YELLOW_BOLD + "You traveled for " + random.nextInt(30) + " days and finally you see a town ahead." + Colors.RESET);
     }
 
     public void statsAvailableDialog() {
@@ -132,7 +133,7 @@ public class Game implements Serializable {
         System.out.println(hero.getHeroStatus());
         hero.showGoldAmount();
         System.out.println(Colors.CYAN_BOLD + " Main Stats:\n" + Colors.CYAN + " Strength [" + hero.getStrength() + "]\n Agility [" + hero.getAgility() + "]\n Intellect [" + hero.getIntellect() + "]\n Unallocated Stats [" + hero.getStatsAvailable() + "]" + Colors.RESET);
-        System.out.println(Colors.CYAN_BOLD + " Secondary Stats:\n" + Colors.CYAN + " Dodge chance: " + dodgeChance + "%\n Critical chance: "+criticalChance + "%");
+        System.out.println(Colors.CYAN_BOLD + " Secondary Stats:\n" + Colors.CYAN + " Dodge chance: " + dodgeChance + "%\n Critical chance: " + criticalChance + "%");
         if (hero.getStatsAvailable() == 0) {
             statsNum = "999";
             System.out.println(Colors.CYAN + " 1. Back");
@@ -195,6 +196,26 @@ public class Game implements Serializable {
         System.out.println("\033[H\033[2J");
     }
 
+    public void runAwayPenalty() {
+        int penaltyGold = (hero.getGold() / 100);
+        hero.payGold(penaltyGold);
+        System.out.println(Colors.RED_BOLD + "You dropped " + penaltyGold + " gold while running." + Colors.RESET);
+    }
+
+    private void playerDied() {
+        int goldPenalty = (hero.getGold() / 4);
+        int expPenalty = hero.getExpForNextLvl() / 4;
+        hero.payGold(goldPenalty);
+        if (hero.getExperience() < expPenalty) {
+            expPenalty = hero.getExperience();
+        }
+        hero.lostExperience(expPenalty);
+        System.out.println(Colors.RED_BOLD + "You have died!");
+        System.out.println("You lost " + goldPenalty + " gold and " + expPenalty + " experience." + Colors.RESET);
+        currentLocation = currentTown;
+
+    }
+
     private void dungeonDialog() {
 
         if (enemy == null) {
@@ -209,7 +230,12 @@ public class Game implements Serializable {
             System.out.println(Colors.CYAN_BOLD + "Start a fight? " + Colors.CYAN + "\n 1. YES\n 2. RUN" + Colors.RESET);
             switch (userInput.nextLine()) {
                 case "1" -> startBattle();
-                case "2" -> enemy = null;
+                case "2" -> {
+                    System.out.println(Colors.RED_BOLD + "You run away from " + enemy.getName() + "." + Colors.RESET);
+                    runAwayPenalty();
+                    enemy = null;
+
+                }
                 default -> {
                 }
             }
@@ -218,12 +244,12 @@ public class Game implements Serializable {
     }
 
     private void exploreDungeon() {
-        if (((Dungeon) currentLocation).finished){
+        if (((Dungeon) currentLocation).finished) {
             System.out.println(Colors.CYAN_BOLD + "You cleared this dungeon, nothing to do here for now." + Colors.RESET);
         } else {
             Random rand = new Random();
             enemy = ((Dungeon) currentLocation).getLocationEnemies().get(rand.nextInt(((Dungeon) currentLocation).getLocationEnemies().size()));
-            System.out.println(Colors.RED + "Enemy appeared " + enemy.getName() + " LVL:" + enemy.getLevel() + Colors.RESET);
+            System.out.println(Colors.RED_BOLD + "Enemy appeared " + enemy.getName() + " LVL:" + enemy.getLevel() + Colors.RESET);
         }
     }
 
@@ -259,7 +285,7 @@ public class Game implements Serializable {
                 for (Item item : currentTown.townAlchemist.getShopItems()) {
                     if (item.getName().equals(potionList.get(chosenItem - 1))) {
                         if (hero.payGold(item.getBuyPrice())) {
-                            hero.addToInventory(item);
+                            hero.addToInventory(((Potion) item).getOne());
                             currentTown.townAlchemist.removeFromShop(item);
                         }
                         break;
@@ -274,6 +300,7 @@ public class Game implements Serializable {
     private void getHealed() {
         if (hero.payGold(100)) {
             hero.restoreHpMp();
+            System.out.println(Colors.YELLOW_BOLD + "You feel much better now. You are fully healed." + Colors.RESET);
         }
     }
 
@@ -283,8 +310,8 @@ public class Game implements Serializable {
                 "\n 1. Go to town alchemist." +
                 "\n 2. Go to " + currentTown.townDungeon.getName() + "." +
                 "\n 3. Character info." +
-                "\n 4. Save character and exit to main menu." );
-        if (currentTown.townDungeon.finished){
+                "\n 4. Save character and exit to main menu.");
+        if (currentTown.townDungeon.finished) {
             System.out.println(" 5. Travel to the next town." + Colors.RESET);
         }
         switch (userInput.nextLine()) {
@@ -306,11 +333,14 @@ public class Game implements Serializable {
     private void startBattle() {
         battle = new BattleField();
         battle.getScannerControl(userInput);
-        if (battle.startBattle(hero, enemy)){
+        if (battle.startBattle(hero, enemy)) {
             ((Dungeon) currentLocation).enemyDied(enemy);
-            if (((Dungeon) currentLocation).finished){
-                //TODO GET REWARD
+            if (((Dungeon) currentLocation).finished) {
+                System.out.println(Colors.YELLOW_BOLD + "You cleared a " + currentLocation.getName() + ", you got a reward from " + currentTown.getName() + " town major." + Colors.RESET);
+                hero.addGold((((Dungeon) currentLocation).getDungeonGoldReward()));
             }
+        } else {
+            playerDied();
         }
         enemy = null;
         battle = null;

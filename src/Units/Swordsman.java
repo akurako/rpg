@@ -6,8 +6,8 @@ public class Swordsman extends Character{
         generateExpTable();
         level = 1;
         this.name = name;
-        strength = 50;
-        agility = 250;
+        strength = 15;
+        agility = 10;
         intellect = 5;
         addGold(1000);
         recalculateStats();

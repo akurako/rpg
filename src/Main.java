@@ -13,14 +13,14 @@ public class Main {
     private static void loadCharacterDialog() {
         File characterFile = null;
         final File saveDirectory = new File("SavedCharacters");
-        if (saveDirectory.length() == 0) {
-            System.out.println("You dont have any saved characters.");
+        if (saveDirectory.list().length == 0) {
+            System.out.println(Colors.RED_BOLD + "You dont have any saved characters." + Colors.RESET);
         }
         while (characterFile == null && saveDirectory.list().length != 0) {
-            System.out.println("Choose character you want to load:\n" + Arrays.toString(saveDirectory.list()));
+            System.out.println(Colors.YELLOW_BOLD + "Choose character you want to load:\n" + Arrays.toString(saveDirectory.list()) + Colors.RESET);
             characterFile = new File(saveDirectory + "/" + userInput.nextLine());
             if (!characterFile.exists()) {
-                System.out.println("Incorrect character name.");
+                System.out.println(Colors.RED_BOLD + "Incorrect character name." + Colors.RESET);
                 characterFile = null;
             } else {
                 loadCharacter(characterFile);
@@ -58,7 +58,7 @@ public class Main {
             }
             case "2" -> loadCharacterDialog();
             case "3" -> closeGame = true;
-            default -> System.out.println("Unknown Command");
+            default -> System.out.println(Colors.RED_BOLD + "Unknown Command" + Colors.RESET);
         }
     }
 
@@ -70,15 +70,11 @@ public class Main {
     }
 }
 
-//TODO PRIOR when you die return to town and gold penalty?
-//TODO PRIOR OPTIMIZE CODE BEFORE DEADLINE
+//TODO OPTIMIZE CODE BEFORE DEADLINE
 
 //TODO PASSIVE , ACTIVE SKILLS
 //TODO WEARABLES ARMOR WEAPONS ETC + PRICES
 //TODO INVENTORY MENU + WEIGHT
 //TODO DROP SYSTEM WEARABLES (LOW CHANCE)
-//TODO FIX COLORS IN ALL DIALOGS
 //TODO TELEPORT BETWEEN CITIES
-//TODO SHOW MESSAGE IF DUNGEON CLEARED
-//TODO REWARD FOR DUNGEON COMPLETION
 //TODO SKILLBOOKS DROP

@@ -1,6 +1,6 @@
 package Items;
 
-public class Potion extends Item {
+public class Potion extends Item implements Cloneable {
     int recoveryPercentage;
     String potionType;
     int count;
@@ -59,5 +59,9 @@ public class Potion extends Item {
 
     public int getCount() {
         return count;
+    }
+
+    public Potion getOne(){
+        return new Potion(this.potionType,this.recoveryPercentage);
     }
 }

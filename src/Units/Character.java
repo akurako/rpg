@@ -22,6 +22,18 @@ public class Character extends Unit {
     //GETTERS AND SETTERS-----------------------------------------------------------------------------------------------
 
 
+    public int getGold() {
+        return gold;
+    }
+
+    public int getExpForNextLvl(){
+        return expTable[level -1];
+    }
+
+    public void lostExperience(int amount){
+        this.experience -= amount;
+    }
+
     public Object getSavedGameState() {
         return savedGameState;
     }
@@ -100,7 +112,7 @@ public class Character extends Unit {
 
     //INVENTORY AND ITEMS METHODS---------------------------------------------------------------------------------------
 
-    public void addToInventory(Item item) {
+    public void addToInventory(Item item){
         if ((this.inventoryCurrentWeight + item.getWeight()) <= this.inventoryMaxWeight) {
             System.out.println(Colors.YELLOW + item.getName() + " added to your inventory." + Colors.RESET);
             if (item instanceof Potion) {
@@ -109,10 +121,11 @@ public class Character extends Unit {
                     if (potion.getName().equals(item.getName())) {
                         ((Potion) potion).addOne();
                         stacked = true;
+                        break;
                     }
                 }
                 if (!stacked) {
-                    this.inventory.add(item);
+                    this.inventory.add(((Potion) item).getOne());
                     this.inventoryCurrentWeight += item.getWeight();
                 }
             } else {
@@ -131,16 +144,16 @@ public class Character extends Unit {
     public void usePotion(Potion potion) {
         if (potion.getPotionType().equals("heal")) {
             int startHP = currentHP;
-            int onePercent = maxHP / 100;
-            currentHP += (onePercent * potion.getRecoveryPercentage());
-            if (currentHP > maxMP) {
+            int onePercent = (int)(maxHP / 100.0f);
+           currentHP += (onePercent * potion.getRecoveryPercentage());
+            if (currentHP > maxHP) {
                 currentHP = maxHP;
             }
             System.out.println(Colors.YELLOW + "You drink a healing potion and replenish " + (currentHP - startHP) + " HP" + Colors.RESET);
         }
         if (potion.getPotionType().equals("mana")) {
             int startMP = currentMP;
-            int onePercent = maxMP / 100;
+            int onePercent = (maxMP / 100);
             currentMP += (onePercent * potion.getRecoveryPercentage());
             if (currentMP > maxMP) {
                 currentMP = maxMP;
